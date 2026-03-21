@@ -650,11 +650,11 @@ async function syncHeadCount() {
   try {
     const ctrl = new AbortController();
     const tid = setTimeout(() => ctrl.abort(), NET_TIMEOUT);
-    const url = new URL(GAS_URL);
-    url.searchParams.append('action', 'getHeadCount');
-    const r = await fetch(url.toString(), { signal: ctrl.signal });
+    const url = GAS_URL + '?action=getHeadCount';
+    const r = await fetch(url, { method:'GET', redirect:'follow', signal: ctrl.signal });
     clearTimeout(tid);
-    const data = await r.json();
+    const txt = await r.text();
+    const data = JSON.parse(txt);
     if (data && data.headcount && Array.isArray(data.headcount)) {
       headCount = data.headcount;
       localStorage.setItem(HC_CACHE_KEY, JSON.stringify(headCount));
