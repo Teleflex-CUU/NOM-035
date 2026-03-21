@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<title>Evaluación NOM-035 — Teleflex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+/* ══════════════════════════════════════
+   VARIABLES Y RESET
+══════════════════════════════════════ */
+:root{
+  --navy:#0D2B5A;--navy2:#163872;--navy3:#091e42;
+  --teal:#00796B;--teal2:#004D40;
+  --green:#15803D;--green-bg:#DCFCE7;
+  --amber:#B45309;--amber-bg:#FEF9C3;
+  --red:#B91C1C;--red-bg:#FEE2E2;
+  --slate:#64748B;
+  --bg:#EEF2F9;--white:#FFFFFF;
+  --border:#D1DAE8;--border2:#E8EDF5;
+  --text:#0F172A;--text2:#334155;--text3:#64748B;--text4:#94A3B8;
+  --shadow-sm:0 1px 4px rgba(13,43,90,.08);
+  --shadow:0 4px 20px rgba(13,43,90,.11);
+  --shadow-lg:0 12px 40px rgba(13,43,90,.16);
+  --r:12px;--r-sm:8px;--r-lg:20px;--r-xl:28px;
+  --font:'Outfit',sans-serif;--font-serif:'Lora',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);
+  min-height:100%;font-size:15px;line-height:1.55;overscroll-behavior:none;
+  -webkit-font-smoothing:antialiased}
+
+/* ── BACKGROUND MESH ── */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 100% 0%,rgba(13,43,90,.09) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 0% 100%,rgba(0,121,107,.06) 0%,transparent 60%)}
+
+/* ── HEADER ── */
+#hdr{position:fixed;top:0;left:0;right:0;z-index:200;height:60px;
+  background:var(--navy);display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;box-shadow:0 2px 20px rgba(9,30,66,.4)}
+.hdr-left{display:flex;align-items:center;gap:11px}
+.hdr-icon{width:34px;height:34px;background:rgba(255,255,255,.13);border-radius:9px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hdr-icon svg{width:18px;height:18px}
+.hdr-title{color:#fff;font-weight:700;font-size:15px;letter-spacing:-.2px}
+.hdr-sub{color:rgba(255,255,255,.5);font-size:11px;margin-top:1px}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.hdr-sync{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.8);border-radius:20px;padding:5px 12px;font-size:11px;
+  font-weight:600;cursor:pointer;font-family:var(--font);transition:all .15s}
+.hdr-sync:hover{background:rgba(255,255,255,.2);color:#fff}
+#hc-status{font-size:11px;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:5px}
+#hc-dot{width:7px;height:7px;border-radius:50%;background:#EF4444;flex-shrink:0}
+#hc-dot.loaded{background:#4ADE80}
+
+/* ── MAIN ── */
+#main{position:relative;z-index:1;margin-top:60px;
+  min-height:calc(100vh - 60px);display:flex;flex-direction:column}
+
+/* ── SCREENS ── */
+.screen{display:none;flex:1}
+.screen.active{display:flex;flex-direction:column;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* ══════════════════════════════════════
+   PANTALLA: IDENTIFICACIÓN
+══════════════════════════════════════ */
+#screen-id{align-items:center;justify-content:center;padding:24px 16px 40px}
+.id-card{background:var(--white);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);
+  width:100%;max-width:540px;overflow:hidden}
+.id-hero{background:linear-gradient(135deg,var(--navy3) 0%,var(--navy2) 100%);
+  padding:32px 30px 36px;position:relative;overflow:hidden}
+.id-hero::after{content:'';position:absolute;right:-50px;bottom:-50px;
+  width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.04)}
+.id-hero::before{content:'';position:absolute;left:-30px;top:-30px;
+  width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.03)}
+.id-eyebrow{font-size:11px;font-weight:700;color:rgba(255,255,255,.5);
+  letter-spacing:1.8px;text-transform:uppercase;margin-bottom:10px}
+.id-title{font-family:var(--font-serif);color:#fff;font-size:26px;
+  line-height:1.25;margin-bottom:10px}
+.id-desc{color:rgba(255,255,255,.65);font-size:13.5px;line-height:1.6;max-width:380px}
+
+.id-body{padding:28px 30px 30px}
+
+/* Notice */
+.notice{border-radius:var(--r-sm);padding:11px 14px;font-size:13px;
+  display:flex;align-items:flex-start;gap:10px;margin-bottom:22px;line-height:1.5}
+.notice.info{background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF}
+.notice.warn{background:var(--amber-bg);border:1px solid #FDE68A;color:var(--amber)}
+.notice.ok{background:var(--green-bg);border:1px solid #BBF7D0;color:var(--green)}
+.notice svg{flex-shrink:0;margin-top:1px}
+
+/* Número empleado grande */
+.emp-search{margin-bottom:20px}
+.emp-search-label{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;display:block}
+.emp-search-wrap{position:relative}
+.emp-search-wrap input{width:100%;padding:15px 18px;font-size:20px;font-weight:700;
+  font-family:var(--font);border:2.5px solid var(--border);border-radius:var(--r);
+  color:var(--navy);background:#fff;letter-spacing:1px;transition:border-color .15s}
+.emp-search-wrap input:focus{outline:none;border-color:var(--navy);
+  box-shadow:0 0 0 4px rgba(13,43,90,.1)}
+.emp-search-wrap input::placeholder{font-size:15px;font-weight:400;letter-spacing:0;color:var(--text4)}
+.emp-search-wrap input.found{border-color:var(--green)}
+.emp-search-wrap input.notfound{border-color:var(--amber)}
+.emp-search-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:none;border:none;color:var(--text4);cursor:pointer;font-size:20px;padding:4px;
+  display:none}
+.emp-search-wrap:has(input:not(:placeholder-shown)) .emp-search-clear{display:block}
+
+/* Ficha del empleado */
+.emp-card{border:2px solid var(--green);border-radius:var(--r);padding:16px 18px;
+  margin-bottom:20px;background:#F0FDF4;display:none}
+.emp-card.show{display:block;animation:fadeUp .2s ease}
+.emp-card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.emp-avatar{width:44px;height:44px;background:var(--navy);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;color:#fff;
+  font-weight:800;font-size:16px;flex-shrink:0}
+.emp-name{font-size:16px;font-weight:700;color:var(--navy)}
+.emp-noemp{font-size:12px;color:var(--text3);font-weight:500;margin-top:1px}
+.emp-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.emp-field{background:#fff;border-radius:var(--r-sm);padding:9px 12px;border:1px solid #BBF7D0}
+.emp-field-lbl{font-size:10px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.emp-field-val{font-size:13px;font-weight:600;color:var(--text)}
+
+/* Formulario manual */
+.manual-form{display:none}
+.manual-form.show{display:block}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.f-full{margin-bottom:10px}
+.f-group label{font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:5px}
+.f-group input,.f-group select{width:100%;padding:10px 13px;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);font-family:var(--font);font-size:14px;color:var(--text);
+  transition:border-color .15s}
+.f-group input:focus,.f-group select:focus{outline:none;border-color:var(--navy)}
+
+/* Flujo info */
+.flow-preview{margin-bottom:22px}
+.flow-preview-title{font-size:12px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.flow-steps{display:flex;gap:0;align-items:center}
+.flow-step{flex:1;text-align:center;position:relative}
+.flow-step:not(:last-child)::after{content:'';position:absolute;top:18px;left:60%;
+  right:-10%;height:2px;background:var(--border2);z-index:0}
+.flow-step-icon{width:36px;height:36px;border-radius:50%;background:var(--navy);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:14px;margin:0 auto 6px;position:relative;z-index:1}
+.flow-step-label{font-size:10px;font-weight:600;color:var(--text3);line-height:1.3}
+.flow-step-count{font-size:9px;color:var(--text4);margin-top:2px}
+
+/* ── BOTÓN INICIO ── */
+.btn-start{width:100%;padding:16px;background:var(--navy);color:#fff;
+  border:none;border-radius:var(--r-lg);font-family:var(--font);font-size:16px;
+  font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  gap:10px;box-shadow:0 6px 20px rgba(13,43,90,.3);transition:all .18s;letter-spacing:-.2px}
+.btn-start:hover{background:var(--navy2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,43,90,.38)}
+.btn-start:active{transform:none}
+.btn-start:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* ══════════════════════════════════════
+   BARRA DE PROGRESO GLOBAL (sticky)
+══════════════════════════════════════ */
+#prog-bar-global{position:sticky;top:60px;z-index:150;background:var(--white);
+  border-bottom:1px solid var(--border2);padding:12px 20px;
+  box-shadow:0 2px 12px rgba(0,0,0,.05);display:none}
+#prog-bar-global.show{display:block}
+.pg-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.pg-phase{font-size:13px;font-weight:700;color:var(--navy)}
+.pg-counter{font-size:12px;color:var(--text3);font-weight:500}
+.pg-track{height:6px;background:var(--border2);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.pg-fill{height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--navy),var(--teal));
+  transition:width .4s cubic-bezier(.4,0,.2,1)}
+.pg-phases{display:flex;gap:4px}
+.pg-seg{flex:1;height:3px;border-radius:2px;background:var(--border2);transition:background .3s}
+.pg-seg.done{background:var(--teal)}
+.pg-seg.active{background:var(--navy)}
+
+/* ══════════════════════════════════════
+   PANTALLA: ENCUESTA (secciones)
+══════════════════════════════════════ */
+#screen-survey{padding:0 0 80px}
+.survey-wrap{max-width:700px;margin:0 auto;padding:16px}
+
+.section-card{background:var(--white);border-radius:var(--r-xl);
+  box-shadow:var(--shadow);overflow:hidden;margin-bottom:0}
+
+/* Header de sección */
+.sec-header{padding:24px 28px;background:linear-gradient(135deg,var(--navy3),var(--navy))}
+.sec-eyebrow{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);
+  letter-spacing:1.8px;text-transform:uppercase;margin-bottom:6px}
+.sec-title{font-family:var(--font-serif);color:#fff;font-size:20px;line-height:1.3;margin-bottom:4px}
+.sec-desc{color:rgba(255,255,255,.6);font-size:12.5px}
+
+/* Preguntas */
+.questions-list{padding:4px 0}
+.q-item{padding:20px 28px;border-bottom:1px solid var(--border2);transition:background .12s}
+.q-item:last-child{border-bottom:none}
+.q-item.answered{background:#FAFBFF}
+.q-item.unanswered-flag{background:#FFFBEB;border-left:3px solid var(--amber)}
+.q-num{font-size:10px;font-weight:700;color:var(--text4);letter-spacing:.5px;margin-bottom:5px}
+.q-text{font-size:14.5px;font-weight:500;color:var(--text);line-height:1.55;margin-bottom:13px}
+
+/* Opciones como chips horizontales */
+.q-chips{display:flex;gap:6px;flex-wrap:wrap}
+.q-chip{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);
+  background:#fff;cursor:pointer;font-size:12.5px;font-weight:600;
+  color:var(--text3);transition:all .14s;font-family:var(--font);line-height:1}
+.q-chip:hover{border-color:var(--navy2);color:var(--navy);background:#F0F4FF}
+.q-chip.sel{background:var(--navy);color:#fff;border-color:var(--navy)}
+
+/* En móvil, chips verticales si son muchos */
+@media(max-width:480px){
+  .q-chips{flex-direction:column;gap:5px}
+  .q-chip{text-align:center;padding:10px 14px}
+}
+
+/* Navegación de sección */
+.sec-nav{padding:18px 28px;background:var(--bg);border-top:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;gap:12px}
+.btn-nav{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;
+  border-radius:var(--r);border:none;cursor:pointer;font-family:var(--font);
+  font-size:14px;font-weight:700;transition:all .15s}
+.btn-back{background:#fff;border:1.5px solid var(--border);color:var(--text2)}
+.btn-back:hover{border-color:var(--navy);color:var(--navy)}
+.btn-next{background:var(--navy);color:#fff;box-shadow:0 4px 14px rgba(13,43,90,.25)}
+.btn-next:hover{background:var(--navy2);transform:translateY(-1px)}
+.btn-finish{background:var(--teal);color:#fff;box-shadow:0 4px 14px rgba(0,121,107,.3)}
+.btn-finish:hover{background:var(--teal2);transform:translateY(-1px)}
+
+/* ══════════════════════════════════════
+   PANTALLA: ATS (opcional)
+══════════════════════════════════════ */
+#screen-ats{align-items:center;justify-content:center;padding:24px 16px 60px}
+.ats-wrap{width:100%;max-width:560px}
+.ats-card{background:var(--white);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);overflow:hidden}
+.ats-header{background:linear-gradient(135deg,#78350F,#92400E);padding:26px 28px}
+.ats-header .sec-title{font-size:19px}
+.ats-body{padding:24px 28px}
+.ats-q{margin-bottom:18px}
+.ats-q label{font-size:13px;font-weight:600;color:var(--text2);display:block;margin-bottom:6px}
+.ats-q input,.ats-q select,.ats-q textarea{width:100%;padding:10px 14px;
+  border:1.5px solid var(--border);border-radius:var(--r-sm);
+  font-family:var(--font);font-size:14px;color:var(--text);background:#fff;
+  transition:border-color .15s}
+.ats-q input:focus,.ats-q select:focus,.ats-q textarea:focus{outline:none;border-color:var(--navy)}
+.ats-q textarea{resize:vertical;min-height:90px}
+.ats-q-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.ats-q-grid{grid-template-columns:1fr}}
+.ats-skip{width:100%;padding:13px;background:none;border:1.5px solid var(--border);
+  border-radius:var(--r);font-family:var(--font);font-size:14px;font-weight:600;
+  color:var(--text3);cursor:pointer;margin-top:8px;transition:all .15s}
+.ats-skip:hover{border-color:var(--navy);color:var(--navy)}
+
+/* ══════════════════════════════════════
+   PANTALLA: COMPLETADO
+══════════════════════════════════════ */
+#screen-done{align-items:center;justify-content:center;padding:24px 16px 60px}
+.done-card{background:var(--white);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);
+  padding:44px 32px;text-align:center;max-width:480px;width:100%}
+.done-icon{width:76px;height:76px;border-radius:50%;
+  background:linear-gradient(135deg,#D1FAE5,#6EE7B7);
+  margin:0 auto 22px;display:flex;align-items:center;justify-content:center;font-size:34px;
+  animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.done-title{font-family:var(--font-serif);font-size:26px;color:var(--navy);margin-bottom:10px}
+.done-sub{color:var(--text3);font-size:14px;max-width:340px;margin:0 auto 28px;line-height:1.6}
+.done-results{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:28px}
+.done-pill{padding:7px 18px;border-radius:20px;font-size:12px;font-weight:700;border:2px solid}
+.dp-null{background:#EDE9FE;color:#5B21B6;border-color:#C4B5FD}
+.dp-low{background:var(--green-bg);color:#166534;border-color:#86EFAC}
+.dp-med{background:#FEF9C3;color:#854D0E;border-color:#FDE047}
+.dp-high{background:#FEE2E2;color:#991B1B;border-color:#FCA5A5}
+.dp-vhigh{background:#FCE7F3;color:#831843;border-color:#F9A8D4}
+.done-emp-summary{background:var(--bg);border-radius:var(--r);padding:14px 16px;
+  margin-bottom:24px;text-align:left}
+.done-emp-name{font-size:15px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.done-emp-meta{font-size:12px;color:var(--text3)}
+.btn-reset{width:100%;padding:14px;background:var(--navy);color:#fff;
+  border:none;border-radius:var(--r-lg);font-family:var(--font);font-size:15px;
+  font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(13,43,90,.25);transition:all .15s}
+.btn-reset:hover{background:var(--navy2)}
+.done-hint{font-size:11px;color:var(--text4);margin-top:10px}
+
+/* ══════════════════════════════════════
+   LOADING OVERLAY
+══════════════════════════════════════ */
+#loading{position:fixed;inset:0;background:rgba(9,30,66,.72);z-index:9000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px;opacity:0;pointer-events:none;transition:opacity .22s}
+#loading.show{opacity:1;pointer-events:all}
+.spinner{width:44px;height:44px;border:4px solid rgba(255,255,255,.2);
+  border-top-color:#fff;border-radius:50%;animation:spin .75s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading-msg{color:#fff;font-size:14px;font-weight:600;font-family:var(--font)}
+
+/* ══════════════════════════════════════
+   TOAST
+══════════════════════════════════════ */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(70px);
+  background:var(--text);color:#fff;padding:11px 20px;border-radius:30px;
+  font-size:13px;font-weight:600;z-index:9999;transition:transform .28s cubic-bezier(.34,1.56,.64,1);
+  box-shadow:var(--shadow-lg);white-space:nowrap;pointer-events:none;font-family:var(--font)}
+#toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:480px){
+  .id-hero{padding:24px 20px 28px}
+  .id-title{font-size:22px}
+  .id-body{padding:20px}
+  .q-item{padding:16px 18px}
+  .sec-header{padding:20px 18px}
+  .sec-nav{padding:14px 18px}
+  .emp-fields{grid-template-columns:1fr}
+  .flow-step-label{font-size:9px}
+}
+</style>
+</head>
+<body>
+
+<div id="loading"><div class="spinner"></div><p id="loading-msg">Cargando…</p></div>
+<div id="toast"></div>
+
+<!-- HEADER -->
+<header id="hdr">
+  <div class="hdr-left">
+    <div class="hdr-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+      </svg>
+    </div>
+    <div>
+      <div class="hdr-title">Teleflex — Salud Ocupacional</div>
+      <div class="hdr-sub">Evaluación NOM-035-STPS-2018</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div id="hc-status">
+      <div id="hc-dot"></div>
+      <span id="hc-label">Sin catálogo</span>
+    </div>
+    <button class="hdr-sync" onclick="syncHeadCount()">↻ Actualizar</button>
+  </div>
+</header>
+
+<!-- BARRA DE PROGRESO GLOBAL -->
+<div id="prog-bar-global">
+  <div class="pg-top">
+    <span class="pg-phase" id="pg-phase-name">Sección</span>
+    <span class="pg-counter" id="pg-counter">0 / 95</span>
+  </div>
+  <div class="pg-track"><div class="pg-fill" id="pg-fill" style="width:0%"></div></div>
+  <div class="pg-phases" id="pg-phases"></div>
+</div>
+
+<div id="main">
+
+<!-- ══════════════════════════════════════
+     PANTALLA 1: IDENTIFICACIÓN
+══════════════════════════════════════ -->
+<div class="screen active" id="screen-id">
+  <div class="id-card">
+    <div class="id-hero">
+      <div class="id-eyebrow">NOM-035-STPS-2018 · Teleflex Chihuahua</div>
+      <div class="id-title">Evaluación de Factores de Riesgo Psicosocial</div>
+      <div class="id-desc">Ingresa tu número de empleado para comenzar. Tus respuestas son confidenciales y no afectan tu evaluación de desempeño.</div>
+    </div>
+    <div class="id-body">
+
+      <div class="notice info" id="notice-conf">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span>Esta evaluación es <strong>anónima y confidencial</strong>. Los resultados se usan únicamente para mejorar el ambiente laboral.</span>
+      </div>
+
+      <!-- BÚSQUEDA DE EMPLEADO -->
+      <div class="emp-search">
+        <label class="emp-search-label">Número de Empleado</label>
+        <div class="emp-search-wrap">
+          <input type="text" id="inp-noemp" placeholder="Ej: TLX-001"
+            autocomplete="off" autocapitalize="characters" autocorrect="off"
+            oninput="lookupEmployee(this.value)" spellcheck="false"/>
+          <button class="emp-search-clear" onclick="clearEmployee()" title="Limpiar">×</button>
+        </div>
+      </div>
+
+      <!-- FICHA AUTOCOMPLETE -->
+      <div class="emp-card" id="emp-card">
+        <div class="emp-card-header">
+          <div class="emp-avatar" id="emp-avatar">?</div>
+          <div>
+            <div class="emp-name" id="emp-name-lbl">—</div>
+            <div class="emp-noemp" id="emp-noemp-lbl">—</div>
+          </div>
+        </div>
+        <div class="emp-fields" id="emp-fields-grid"></div>
+      </div>
+
+      <!-- ADVERTENCIA NO ENCONTRADO -->
+      <div class="notice warn" id="notice-notfound" style="display:none">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>Número no encontrado en el catálogo. Puedes continuar ingresando tus datos manualmente.</span>
+      </div>
+
+      <!-- FORMULARIO MANUAL -->
+      <div class="manual-form" id="manual-form">
+        <div class="f-row">
+          <div class="f-group"><label>Nombre Completo *</label><input id="m-nombre" placeholder="Tu nombre completo"/></div>
+          <div class="f-group"><label>Puesto</label><input id="m-puesto" placeholder="Tu puesto"/></div>
+        </div>
+        <div class="f-row">
+          <div class="f-group"><label>Departamento / Área *</label><input id="m-area" placeholder="Área de trabajo"/></div>
+          <div class="f-group"><label>Planta</label><input id="m-planta" placeholder="Planta 1, 2…"/></div>
+        </div>
+        <div class="f-row">
+          <div class="f-group">
+            <label>Turno</label>
+            <select id="m-turno">
+              <option value="Matutino">Matutino</option>
+              <option value="Vespertino">Vespertino</option>
+              <option value="Nocturno">Nocturno</option>
+              <option value="Administrativo">Administrativo</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Género</label>
+            <select id="m-genero">
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+              <option value="NB">No binario / Prefiero no decir</option>
+            </select>
+          </div>
+        </div>
+        <div class="f-full">
+          <div class="f-group"><label>Antigüedad aproximada</label>
+            <select id="m-antiguedad">
+              <option value="menos_1">Menos de 1 año</option>
+              <option value="1_3">1 a 3 años</option>
+              <option value="3_5">3 a 5 años</option>
+              <option value="5_10">5 a 10 años</option>
+              <option value="mas_10">Más de 10 años</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA PREVIA DEL FLUJO -->
+      <div class="flow-preview">
+        <div class="flow-preview-title">Lo que vas a responder hoy</div>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-step-icon">📋</div>
+            <div class="flow-step-label">Guía II</div>
+            <div class="flow-step-count">72 preguntas</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-icon">🏢</div>
+            <div class="flow-step-label">Guía III</div>
+            <div class="flow-step-count">23 preguntas</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-icon">⚠️</div>
+            <div class="flow-step-label">ATS</div>
+            <div class="flow-step-count">Opcional</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-start" id="btn-start" onclick="startSurvey()" disabled>
+        <span>Comenzar Evaluación</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PANTALLA 2: ENCUESTA UNIFICADA
+══════════════════════════════════════ -->
+<div class="screen" id="screen-survey">
+  <div class="survey-wrap">
+    <div class="section-card" id="section-card"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PANTALLA 3: ATS OPCIONAL
+══════════════════════════════════════ -->
+<div class="screen" id="screen-ats">
+  <div class="ats-wrap">
+    <div class="ats-card">
+      <div class="ats-header">
+        <div class="sec-eyebrow">Guía de Referencia I — Opcional</div>
+        <div class="sec-title" style="font-family:var(--font-serif);color:#fff;font-size:19px;line-height:1.3;margin-bottom:6px">Acontecimiento Traumático Severo</div>
+        <div style="color:rgba(255,255,255,.65);font-size:13px">Si en el último año viviste o presenciaste un evento impactante en el trabajo, puedes reportarlo aquí para recibir apoyo.</div>
+      </div>
+      <div class="ats-body">
+        <div class="notice info" style="margin-bottom:20px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <span>Este reporte es <strong>voluntario</strong>. Solo se usa para brindarte atención médica o psicológica si lo solicitas.</span>
+        </div>
+        <div class="ats-q-grid" style="margin-bottom:14px">
+          <div class="ats-q">
+            <label>Fecha del evento *</label>
+            <input type="date" id="ats-fecha"/>
+          </div>
+          <div class="ats-q">
+            <label>Tipo de acontecimiento *</label>
+            <select id="ats-tipo">
+              <option value="">Selecciona…</option>
+              <option value="accidente">Accidente grave o fatal</option>
+              <option value="violencia">Violencia / Agresión</option>
+              <option value="muerte">Muerte de compañero</option>
+              <option value="asalto">Asalto con violencia</option>
+              <option value="desastre">Desastre / Explosión</option>
+              <option value="acoso">Acoso laboral o sexual</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="ats-q">
+          <label>¿Cómo participaste?</label>
+          <select id="ats-rol">
+            <option value="testigo">Lo presencié directamente</option>
+            <option value="victima">Fui la persona afectada</option>
+            <option value="enterado">Me enteré después</option>
+            <option value="intervencion">Intervine para ayudar</option>
+          </select>
+        </div>
+        <div class="ats-q">
+          <label>Descripción breve (opcional)</label>
+          <textarea id="ats-desc" placeholder="Puedes ser tan breve o detallado como prefieras…"></textarea>
+        </div>
+        <div class="ats-q">
+          <label>¿Cómo te has sentido desde entonces? (opcional)</label>
+          <textarea id="ats-sentimiento" placeholder="Cualquier síntoma, emoción o cambio que hayas notado…" style="min-height:70px"></textarea>
+        </div>
+        <div class="ats-q">
+          <label>¿Deseas atención médica o psicológica?</label>
+          <select id="ats-atencion">
+            <option value="si">Sí, la solicito</option>
+            <option value="considerar">Lo voy a considerar</option>
+            <option value="no">No por ahora</option>
+          </select>
+        </div>
+        <button class="btn-start" style="margin-top:8px" onclick="submitATS()">
+          Enviar reporte y finalizar
+        </button>
+        <button class="ats-skip" onclick="skipATS()">
+          No tengo ningún evento que reportar — Finalizar sin reporte
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PANTALLA 4: COMPLETADO
+══════════════════════════════════════ -->
+<div class="screen" id="screen-done">
+  <div class="done-card">
+    <div class="done-icon">✅</div>
+    <div class="done-title">¡Evaluación completada!</div>
+    <div class="done-sub" id="done-sub">Tu evaluación ha sido enviada exitosamente. Gracias por tu participación.</div>
+
+    <div class="done-emp-summary" id="done-emp-summary"></div>
+    <div class="done-results" id="done-results"></div>
+
+    <button class="btn-reset" onclick="resetAll()">Siguiente empleado →</button>
+    <div class="done-hint">Este dispositivo puede ser usado por el siguiente compañero</div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+'use strict';
+
+// ════════════════════════════════════════════
+//  CONFIGURACIÓN
+// ════════════════════════════════════════════
+const GAS_URL = 'TU_URL_AQUI'; // ← Reemplaza con tu URL de Google Apps Script
+const NET_TIMEOUT = 10000;
+const HC_CACHE_KEY = 'nom035_hc_cache';
+const HC_TS_KEY = 'nom035_hc_ts';
+const HC_MAX_AGE = 1000 * 60 * 60 * 4; // 4 horas de caché
+
+// ════════════════════════════════════════════
+//  ESTADO GLOBAL
+// ════════════════════════════════════════════
+let headCount = [];          // catálogo de empleados cargado
+let currentEmployee = null;  // empleado seleccionado / datos manuales
+let isManual = false;        // si el empleado no estaba en HC
+
+// Respuestas
+let g2Answers = {};   // { qIndex: valor }
+let g3Answers = {};
+
+// Control de sección actual dentro de cada guía
+let currentPhase = 'g2';  // 'g2' | 'g3'
+let currentSectionIdx = 0;
+
+// Resultados finales
+let g2Score = 0, g2Nivel = '', g2CatScores = {};
+let g3Score = 0, g3Nivel = '', g3CatScores = {};
+
+// ════════════════════════════════════════════
+//  HEAD COUNT — CARGA Y BÚSQUEDA
+// ════════════════════════════════════════════
+function loadHeadCountCache() {
+  try {
+    const ts = parseInt(localStorage.getItem(HC_TS_KEY) || '0');
+    const age = Date.now() - ts;
+    if (age < HC_MAX_AGE) {
+      const cached = localStorage.getItem(HC_CACHE_KEY);
+      if (cached) {
+        headCount = JSON.parse(cached);
+        updateHCStatus();
+        return true;
+      }
+    }
+  } catch(e) { console.warn('HC cache error', e); }
+  return false;
+}
+
+function updateHCStatus() {
+  const dot = document.getElementById('hc-dot');
+  const lbl = document.getElementById('hc-label');
+  if (!dot || !lbl) return;
+  if (headCount.length > 0) {
+    dot.classList.add('loaded');
+    lbl.textContent = headCount.length + ' empleados';
+  } else {
+    dot.classList.remove('loaded');
+    lbl.textContent = 'Sin catálogo';
+  }
+}
+
+async function syncHeadCount() {
+  if (!GAS_URL || GAS_URL === 'TU_URL_AQUI') {
+    toast('Configure la URL del GAS primero');
+    return;
+  }
+  showLoading('Cargando catálogo de empleados…');
+  try {
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), NET_TIMEOUT);
+    const url = new URL(GAS_URL);
+    url.searchParams.append('action', 'getHeadCount');
+    const r = await fetch(url.toString(), { signal: ctrl.signal });
+    clearTimeout(tid);
+    const data = await r.json();
+    if (data && data.headcount && Array.isArray(data.headcount)) {
+      headCount = data.headcount;
+      localStorage.setItem(HC_CACHE_KEY, JSON.stringify(headCount));
+      localStorage.setItem(HC_TS_KEY, Date.now().toString());
+      updateHCStatus();
+      toast('Catálogo actualizado: ' + headCount.length + ' empleados ✓');
+    } else {
+      toast('No se encontró Head Count en el servidor');
+    }
+  } catch(e) {
+    toast('Sin conexión — usando caché local');
+  } finally {
+    hideLoading();
+  }
+}
+
+// ════════════════════════════════════════════
+//  LOOKUP EMPLEADO
+// ════════════════════════════════════════════
+let lookupTimer = null;
+function lookupEmployee(val) {
+  clearTimeout(lookupTimer);
+  lookupTimer = setTimeout(() => _doLookup(val.trim().toUpperCase()), 250);
+}
+
+function _doLookup(noemp) {
+  const inp = document.getElementById('inp-noemp');
+  const cardEl = document.getElementById('emp-card');
+  const notFound = document.getElementById('notice-notfound');
+  const manualForm = document.getElementById('manual-form');
+  const btnStart = document.getElementById('btn-start');
+
+  if (!noemp || noemp.length < 2) {
+    // Reset
+    if (inp) { inp.classList.remove('found','notfound'); }
+    if (cardEl) cardEl.classList.remove('show');
+    if (notFound) notFound.style.display = 'none';
+    if (manualForm) manualForm.classList.remove('show');
+    currentEmployee = null;
+    isManual = false;
+    if (btnStart) btnStart.disabled = true;
+    return;
+  }
+
+  // Buscar en headCount
+  const found = headCount.find(e =>
+    (e.no || '').toString().toUpperCase() === noemp ||
+    (e.noemp || '').toString().toUpperCase() === noemp
+  );
+
+  if (found) {
+    // Empleado encontrado
+    inp.classList.add('found');
+    inp.classList.remove('notfound');
+    notFound.style.display = 'none';
+    manualForm.classList.remove('show');
+    currentEmployee = { ...found };
+    isManual = false;
+    showEmployeeCard(found);
+    cardEl.classList.add('show');
+    btnStart.disabled = false;
+  } else if (headCount.length > 0) {
+    // No encontrado pero hay catálogo
+    inp.classList.add('notfound');
+    inp.classList.remove('found');
+    cardEl.classList.remove('show');
+    notFound.style.display = 'flex';
+    manualForm.classList.add('show');
+    currentEmployee = { no: noemp, noemp: noemp };
+    isManual = true;
+    btnStart.disabled = false;
+  } else {
+    // Sin catálogo — siempre manual
+    inp.classList.remove('found','notfound');
+    cardEl.classList.remove('show');
+    notFound.style.display = 'none';
+    manualForm.classList.add('show');
+    currentEmployee = { no: noemp, noemp: noemp };
+    isManual = true;
+    btnStart.disabled = false;
+  }
+}
+
+function showEmployeeCard(emp) {
+  // Avatar con iniciales
+  const avatarEl = document.getElementById('emp-avatar');
+  const nameEl = document.getElementById('emp-name-lbl');
+  const noEl = document.getElementById('emp-noemp-lbl');
+  const fieldsEl = document.getElementById('emp-fields-grid');
+
+  if (!avatarEl || !nameEl || !noEl || !fieldsEl) return;
+
+  const nombre = emp.nombre || emp.name || '?';
+  const initials = nombre.split(' ').slice(0,2).map(w => w[0]||'').join('').toUpperCase();
+  avatarEl.textContent = initials || '?';
+  nameEl.textContent = nombre;
+  noEl.textContent = 'No. ' + (emp.no || emp.noemp || '—');
+
+  // Campos normativa NOM-035
+  const fields = [
+    { label:'Puesto', val: emp.puesto || emp.position || '—' },
+    { label:'Departamento', val: emp.dept || emp.departamento || emp.area || '—' },
+    { label:'Turno', val: emp.turno || emp.shift || '—' },
+    { label:'Planta', val: emp.planta || emp.plant || '—' },
+    { label:'Género', val: emp.genero === 'F' ? 'Femenino' : emp.genero === 'M' ? 'Masculino' : emp.genero || '—' },
+    { label:'Antigüedad', val: emp.antiguedad || emp.ingreso ? calcAntiguedad(emp.ingreso) : '—' },
+  ];
+
+  fieldsEl.innerHTML = fields.map(f => `
+    <div class="emp-field">
+      <div class="emp-field-lbl">${f.label}</div>
+      <div class="emp-field-val">${f.val}</div>
+    </div>`).join('');
+}
+
+function calcAntiguedad(fechaIngreso) {
+  if (!fechaIngreso) return '—';
+  try {
+    const d = new Date(fechaIngreso);
+    const years = Math.floor((Date.now() - d.getTime()) / (1000 * 60 * 60 * 24 * 365.25));
+    if (years < 1) return 'Menos de 1 año';
+    if (years === 1) return '1 año';
+    return years + ' años';
+  } catch(e) { return '—'; }
+}
+
+function clearEmployee() {
+  const inp = document.getElementById('inp-noemp');
+  if (inp) { inp.value = ''; inp.classList.remove('found','notfound'); }
+  _doLookup('');
+}
+
+// ════════════════════════════════════════════
+//  RESOLUCIÓN DE DATOS DEL EMPLEADO
+// ════════════════════════════════════════════
+function resolveEmployeeData() {
+  if (!isManual && currentEmployee) return currentEmployee;
+  // Combinar datos de headcount parcial + formulario manual
+  return {
+    no: currentEmployee ? currentEmployee.no : '',
+    noemp: currentEmployee ? currentEmployee.noemp || currentEmployee.no : '',
+    nombre: v('m-nombre'),
+    puesto: v('m-puesto'),
+    dept: v('m-area'),
+    area: v('m-area'),
+    planta: v('m-planta'),
+    turno: v('m-turno'),
+    genero: v('m-genero'),
+    antiguedad: v('m-antiguedad'),
+    fecha_ingreso: currentEmployee ? (currentEmployee.ingreso || '') : '',
+    manual: true
+  };
+}
+
+function v(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+// ════════════════════════════════════════════
+//  DEFINICIÓN GUÍA II (72 preguntas, 7 secciones)
+// ════════════════════════════════════════════
+const G2_SECTIONS = [
+  { id:'amb', name:'Ambiente de Trabajo', guia:'Guía II', totalGuia:72,
+    desc:'Condiciones físicas del lugar donde realizas tu trabajo',
+    qs:[
+      'El espacio donde trabajo es adecuado para realizar mis actividades',
+      'Cuento con las herramientas y materiales necesarios para hacer mi trabajo',
+      'Los equipos de trabajo funcionan correctamente y están en buenas condiciones',
+      'Existe buena iluminación en mi área de trabajo',
+      'La temperatura del lugar donde trabajo es adecuada para laborar',
+      'El nivel de ruido en mi área de trabajo me permite concentrarme',
+      'Existe ventilación adecuada en mi lugar de trabajo',
+      'El orden y limpieza de mi área de trabajo es el adecuado',
+    ]
+  },
+  { id:'prop', name:'Factores Propios de la Actividad', guia:'Guía II', totalGuia:72,
+    desc:'Características y exigencias de las tareas que realizas',
+    qs:[
+      'Mi trabajo requiere que esté muy atento a lo que hago',
+      'En mi trabajo necesito mantener concentración durante largos períodos',
+      'Mi trabajo requiere que atienda varios asuntos al mismo tiempo',
+      'En mi trabajo tomo decisiones que pueden afectar a otras personas',
+      'La velocidad con que debo realizar mi trabajo es adecuada para mí',
+      'La cantidad de trabajo que debo realizar es manejable',
+      'Mi trabajo me exige ir más allá de mis capacidades actuales',
+      'El trabajo que realizo requiere que oculte mis emociones o sentimientos',
+      'En mi trabajo debo demostrar emociones distintas a las que en realidad siento',
+      'Mi trabajo me lleva a atender situaciones de violencia o conflictos difíciles',
+      'Para realizar mi trabajo necesito conocimiento técnico especializado',
+      'Mi trabajo exige que asuma responsabilidades de alta importancia',
+    ]
+  },
+  { id:'org', name:'Organización del Tiempo de Trabajo', guia:'Guía II', totalGuia:72,
+    desc:'Distribución y control de tu jornada laboral',
+    qs:[
+      'Mi jornada de trabajo es la establecida oficialmente por la empresa',
+      'Tengo la posibilidad de tomar descansos durante mi jornada laboral',
+      'El tiempo de mis descansos es suficiente para recuperarme',
+      'Realizo tiempo extra de trabajo con frecuencia',
+      'El tiempo de traslado de mi casa al trabajo es razonable',
+      'Cuento con tiempo suficiente para atender mis asuntos personales fuera del trabajo',
+      'Los horarios de entrada y salida de mi trabajo son respetados',
+      'Mi horario de trabajo me permite participar en actividades con mi familia',
+    ]
+  },
+  { id:'lid', name:'Liderazgo y Relaciones en el Trabajo', guia:'Guía II', totalGuia:72,
+    desc:'Cómo es la relación con tu jefe y compañeros',
+    qs:[
+      'Mi jefe inmediato me da retroalimentación útil sobre mi desempeño',
+      'Mi jefe inmediato resuelve los problemas de trabajo de manera adecuada',
+      'Mi jefe inmediato reconoce mi esfuerzo y mi trabajo',
+      'Mi jefe inmediato se interesa por mi bienestar',
+      'Mi jefe inmediato es consistente y justo al tomar decisiones',
+      'Puedo expresar mis opiniones e ideas sin temor a consecuencias negativas',
+      'La relación con mis compañeros de trabajo es respetuosa',
+      'Cuento con el apoyo de mis compañeros cuando lo necesito',
+      'Existe colaboración entre los miembros de mi equipo de trabajo',
+      'Se presentan situaciones de violencia o acoso entre compañeros',
+      'Se presentan situaciones de discriminación en el trabajo',
+      'La relación con mis clientes, usuarios o pacientes es adecuada',
+    ]
+  },
+  { id:'ent', name:'Entorno Organizacional', guia:'Guía II', totalGuia:72,
+    desc:'Cómo está organizada la empresa y qué oportunidades te ofrece',
+    qs:[
+      'Conozco con claridad mis funciones, tareas y responsabilidades',
+      'Las instrucciones que recibo para hacer mi trabajo son claras y precisas',
+      'Recibo capacitación o entrenamiento para mejorar o actualizar mis habilidades',
+      'Tengo oportunidades reales de crecer o progresar en esta empresa',
+      'La empresa me proporciona prestaciones y beneficios suficientes',
+      'Mi salario es adecuado para el trabajo que realizo',
+      'Puedo participar en las decisiones que afectan mi trabajo',
+      'La empresa evalúa mi desempeño de manera justa y objetiva',
+      'Existe comunicación efectiva entre las diferentes áreas de la empresa',
+      'Los cambios importantes en la empresa se me comunican oportunamente',
+      'Confío en la estabilidad y futuro de la empresa donde trabajo',
+      'Me siento comprometido e identificado con los valores de la empresa',
+    ]
+  },
+  { id:'int', name:'Interferencia Trabajo-Familia', guia:'Guía II', totalGuia:72,
+    desc:'Cómo afecta el trabajo a tu vida personal y familiar',
+    qs:[
+      'Mi trabajo interfiere con el tiempo que quisiera dedicar a mi familia',
+      'Las exigencias de mi trabajo afectan negativamente mi vida personal',
+      'Llego a casa tan cansado que no tengo energía para actividades familiares',
+      'Los problemas que traigo del trabajo afectan mi vida familiar',
+      'Tengo dificultades para atender a mi familia por obligaciones de trabajo',
+      'Mi familia se queja de que dedico demasiado tiempo al trabajo',
+      'El trabajo me impide disfrutar de mis pasatiempos y tiempo libre',
+      'Puedo desconectarme del trabajo cuando no estoy en horario laboral',
+    ]
+  },
+  { id:'lid2', name:'Liderazgo Negativo', guia:'Guía II', totalGuia:72,
+    desc:'Situaciones de trato inadecuado por parte de jefes o superiores',
+    qs:[
+      'Mi jefe me descalifica, humilla o menosprecia frente a otras personas',
+      'Mi jefe me agrede verbalmente (gritos, insultos, palabras ofensivas)',
+      'Mi jefe me ignora cuando le hago preguntas o solicito apoyo',
+      'Mi jefe me asigna tareas injustas, innecesarias o humillantes',
+    ]
+  },
+];
+
+// ════════════════════════════════════════════
+//  DEFINICIÓN GUÍA III (23 preguntas, 5 secciones)
+// ════════════════════════════════════════════
+const G3_SECTIONS = [
+  { id:'lid3', name:'Liderazgo', guia:'Guía III', totalGuia:23,
+    desc:'Cómo te relacionas y recibes dirección de tu jefe inmediato',
+    qs:[
+      'Mi jefe directo me da a conocer claramente lo que espera de mi trabajo',
+      'Mi jefe directo toma en cuenta mis opiniones y aportaciones',
+      'Mi jefe directo me trata con respeto y consideración',
+      'Mi jefe directo distribuye la carga de trabajo de manera equitativa entre el equipo',
+      'Mi jefe directo tiene conocimiento suficiente del trabajo que desempeño',
+    ]
+  },
+  { id:'rel3', name:'Relaciones en el Trabajo', guia:'Guía III', totalGuia:23,
+    desc:'Convivencia y apoyo con tus compañeros de equipo',
+    qs:[
+      'Cuento con el apoyo de mis compañeros para realizar mis tareas cuando lo necesito',
+      'En mi área de trabajo existe colaboración para alcanzar los objetivos comunes',
+      'En mi trabajo se establecen relaciones de respeto y compañerismo mutuo',
+      'Mis compañeros de trabajo son accesibles y están disponibles cuando los necesito',
+      'Se me integra y se me toma en cuenta como parte del equipo de trabajo',
+      'Me resulta fácil relacionarme de manera positiva en el trabajo',
+    ]
+  },
+  { id:'par3', name:'Participación en las Decisiones', guia:'Guía III', totalGuia:23,
+    desc:'Tu capacidad de influir en cómo se organiza tu trabajo',
+    qs:[
+      'Cuando se presentan problemas en mi área de trabajo, se me consulta para resolverlos',
+      'Tengo libertad suficiente para tomar las decisiones necesarias en mi trabajo',
+      'Puedo participar en la asignación y organización de mis propias tareas',
+      'Me resulta sencillo aportar ideas y sugerencias de mejora en mi área de trabajo',
+    ]
+  },
+  { id:'dis3', name:'Distribución de Tareas y Roles', guia:'Guía III', totalGuia:23,
+    desc:'Si las responsabilidades están bien definidas y repartidas',
+    qs:[
+      'Considero que las tareas que realizo corresponden realmente a mis funciones y puesto',
+      'La empresa distribuye de manera justa las responsabilidades entre áreas y personas',
+      'La carga de trabajo que me corresponde está claramente definida y es razonable',
+    ]
+  },
+  { id:'cap3', name:'Capacitación e Información', guia:'Guía III', totalGuia:23,
+    desc:'Si recibes la formación y comunicación necesarias para tu trabajo',
+    qs:[
+      'La empresa me proporciona capacitación o entrenamiento para realizar bien mi trabajo',
+      'La empresa me informa oportunamente sobre los cambios que me afectan directamente',
+      'Tengo acceso a información actualizada y clara para desempeñar correctamente mi trabajo',
+      'La empresa me informa sobre los resultados de mi evaluación de desempeño',
+      'Recibo la retroalimentación necesaria para saber si estoy haciendo bien mi trabajo',
+    ]
+  },
+];
+
+const OPTS = ['Siempre','Casi siempre','Algunas veces','Casi nunca','Nunca'];
+
+// Todas las secciones en orden
+const ALL_SECTIONS = [
+  ...G2_SECTIONS.map((s,i) => ({ ...s, phase:'g2', localIdx:i })),
+  ...G3_SECTIONS.map((s,i) => ({ ...s, phase:'g3', localIdx:i })),
+];
+const TOTAL_SECTIONS = ALL_SECTIONS.length; // 12
+
+// ════════════════════════════════════════════
+//  GESTIÓN DE PROGRESO
+// ════════════════════════════════════════════
+function getTotalQs() { return 72 + 23; } // 95
+function getGlobalQIdx(phase, localIdx, qInSection) {
+  if (phase === 'g2') {
+    let offset = 0;
+    for (let i = 0; i < localIdx; i++) offset += G2_SECTIONS[i].qs.length;
+    return offset + qInSection;
+  } else {
+    let offset = 72;
+    for (let i = 0; i < localIdx; i++) offset += G3_SECTIONS[i].qs.length;
+    return offset + qInSection;
+  }
+}
+function countAnswered() {
+  return Object.keys(g2Answers).length + Object.keys(g3Answers).length;
+}
+function getGlobalSectionIdx() {
+  const sec = ALL_SECTIONS[currentSectionGlobal()];
+  if (!sec) return 0;
+  if (sec.phase === 'g2') return sec.localIdx;
+  return G2_SECTIONS.length + sec.localIdx;
+}
+
+let _globalSecIdx = 0; // índice global en ALL_SECTIONS
+function currentSectionGlobal() { return _globalSecIdx; }
+
+function updateProgressBar() {
+  const answered = countAnswered();
+  const total = getTotalQs();
+  const pct = Math.round((answered / total) * 100);
+
+  const fill = document.getElementById('pg-fill');
+  const counter = document.getElementById('pg-counter');
+  const phaseName = document.getElementById('pg-phase-name');
+  if (fill) fill.style.width = pct + '%';
+  if (counter) counter.textContent = answered + ' / ' + total;
+
+  const sec = ALL_SECTIONS[_globalSecIdx];
+  if (phaseName && sec) {
+    phaseName.textContent = sec.guia + ' — ' + sec.name;
+  }
+
+  // Phase segments
+  const phasesEl = document.getElementById('pg-phases');
+  if (phasesEl && phasesEl.children.length === TOTAL_SECTIONS) {
+    for (let i = 0; i < TOTAL_SECTIONS; i++) {
+      const seg = phasesEl.children[i];
+      if (!seg) continue;
+      seg.classList.remove('done','active');
+      if (i < _globalSecIdx) seg.classList.add('done');
+      else if (i === _globalSecIdx) seg.classList.add('active');
+    }
+  }
+}
+
+// ════════════════════════════════════════════
+//  RENDER DE SECCIÓN
+// ════════════════════════════════════════════
+function renderSection(globalIdx) {
+  _globalSecIdx = globalIdx;
+  const sec = ALL_SECTIONS[globalIdx];
+  if (!sec) return;
+  const answers = sec.phase === 'g2' ? g2Answers : g3Answers;
+
+  // Calcular offset de pregunta global dentro del array de respuestas de la guía
+  let secOffset = 0;
+  if (sec.phase === 'g2') {
+    for (let i = 0; i < sec.localIdx; i++) secOffset += G2_SECTIONS[i].qs.length;
+  } else {
+    for (let i = 0; i < sec.localIdx; i++) secOffset += G3_SECTIONS[i].qs.length;
+  }
+
+  // Qué número de pregunta global para mostrar (dentro de toda la guía)
+  let guiaQStart = 0;
+  if (sec.phase === 'g2') {
+    for (let i = 0; i < sec.localIdx; i++) guiaQStart += G2_SECTIONS[i].qs.length;
+  } else {
+    for (let i = 0; i < sec.localIdx; i++) guiaQStart += G3_SECTIONS[i].qs.length;
+  }
+
+  const isLast = globalIdx === TOTAL_SECTIONS - 1;
+  const isFirst = globalIdx === 0;
+
+  const qHtml = sec.qs.map((q, qi) => {
+    const qKey = secOffset + qi;
+    const selVal = answers[qKey];
+    const answered = selVal !== undefined;
+    return `
+      <div class="q-item ${answered?'answered':''}" id="qitem-${globalIdx}-${qi}">
+        <div class="q-num">${sec.guia} · Pregunta ${guiaQStart + qi + 1} de ${sec.totalGuia}</div>
+        <div class="q-text">${q}</div>
+        <div class="q-chips">
+          ${OPTS.map((opt, oi) => `
+            <button class="q-chip ${selVal===oi?'sel':''}"
+              data-gi="${globalIdx}" data-qi="${qi}" data-oi="${oi}"
+              data-key="${qKey}" data-phase="${sec.phase}"
+              onclick="answerQ(this)">
+              ${opt}
+            </button>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  const card = document.getElementById('section-card');
+  if (!card) return;
+  card.innerHTML = `
+    <div class="sec-header">
+      <div class="sec-eyebrow">${sec.guia} · Sección ${sec.localIdx + 1} de ${sec.phase === 'g2' ? G2_SECTIONS.length : G3_SECTIONS.length}</div>
+      <div class="sec-title">${sec.name}</div>
+      <div class="sec-desc">${sec.desc}</div>
+    </div>
+    <div class="questions-list">${qHtml}</div>
+    <div class="sec-nav">
+      <button class="btn-nav btn-back" onclick="navSection(-1)">
+        ${isFirst ? '← Regresar' : '← Anterior'}
+      </button>
+      <button class="btn-nav ${isLast ? 'btn-finish' : 'btn-next'}" onclick="navSection(1)">
+        ${isLast ? 'Continuar → ATS' : 'Siguiente →'}
+      </button>
+    </div>`;
+
+  updateProgressBar();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function answerQ(btn) {
+  const gi = parseInt(btn.dataset.gi);
+  const qi = parseInt(btn.dataset.qi);
+  const oi = parseInt(btn.dataset.oi);
+  const key = parseInt(btn.dataset.key);
+  const phase = btn.dataset.phase;
+
+  const answers = phase === 'g2' ? g2Answers : g3Answers;
+  answers[key] = oi;
+
+  // Update chips in this row
+  const item = document.getElementById('qitem-' + gi + '-' + qi);
+  if (item) {
+    item.querySelectorAll('.q-chip').forEach(c => c.classList.remove('sel'));
+    btn.classList.add('sel');
+    item.classList.add('answered');
+    item.classList.remove('unanswered-flag');
+  }
+  updateProgressBar();
+}
+
+// ════════════════════════════════════════════
+//  NAVEGACIÓN ENTRE SECCIONES
+// ════════════════════════════════════════════
+function navSection(dir) {
+  if (dir === -1) {
+    // Regresar
+    if (_globalSecIdx === 0) {
+      showScreen('id');
+      document.getElementById('prog-bar-global').classList.remove('show');
+      return;
+    }
+    renderSection(_globalSecIdx - 1);
+    return;
+  }
+
+  // Avanzar — validar sección actual
+  const sec = ALL_SECTIONS[_globalSecIdx];
+  const answers = sec.phase === 'g2' ? g2Answers : g3Answers;
+  let secOffset = 0;
+  if (sec.phase === 'g2') {
+    for (let i = 0; i < sec.localIdx; i++) secOffset += G2_SECTIONS[i].qs.length;
+  } else {
+    for (let i = 0; i < sec.localIdx; i++) secOffset += G3_SECTIONS[i].qs.length;
+  }
+
+  const missing = [];
+  sec.qs.forEach((_, qi) => {
+    if (answers[secOffset + qi] === undefined) missing.push(qi);
+  });
+
+  if (missing.length > 0) {
+    toast(`Responde las ${missing.length} pregunta(s) restante(s)`);
+    // Highlight unanswered
+    missing.forEach(qi => {
+      const item = document.getElementById('qitem-' + _globalSecIdx + '-' + qi);
+      if (item) {
+        item.classList.add('unanswered-flag');
+        if (qi === missing[0]) item.scrollIntoView({ behavior:'smooth', block:'center' });
+      }
+    });
+    return;
+  }
+
+  // ¿Es la última sección?
+  if (_globalSecIdx === TOTAL_SECTIONS - 1) {
+    // Calcular scores y pasar a ATS
+    computeScores();
+    showScreen('ats');
+    document.getElementById('prog-bar-global').classList.remove('show');
+    return;
+  }
+
+  renderSection(_globalSecIdx + 1);
+}
+
+// ════════════════════════════════════════════
+//  CÁLCULO DE PUNTAJES
+// ════════════════════════════════════════════
+function computeScores() {
+  // Guía II
+  let g2Total = 0;
+  g2CatScores = {};
+  let qi = 0;
+  G2_SECTIONS.forEach(sec => {
+    let cs = 0;
+    sec.qs.forEach(() => { cs += (g2Answers[qi] || 0); g2Total += (g2Answers[qi] || 0); qi++; });
+    g2CatScores[sec.id] = cs;
+  });
+  g2Score = g2Total;
+  g2Nivel = g2Score <= 20 ? 'nulo' : g2Score <= 45 ? 'bajo' : g2Score <= 70 ? 'medio' : g2Score <= 90 ? 'alto' : 'muy_alto';
+
+  // Guía III
+  let g3Total = 0;
+  g3CatScores = {};
+  let qi3 = 0;
+  G3_SECTIONS.forEach(sec => {
+    let cs = 0;
+    sec.qs.forEach(() => { cs += (g3Answers[qi3] || 0); g3Total += (g3Answers[qi3] || 0); qi3++; });
+    g3CatScores[sec.id] = cs;
+  });
+  g3Score = g3Total;
+  g3Nivel = g3Score <= 10 ? 'nulo' : g3Score <= 20 ? 'bajo' : g3Score <= 30 ? 'medio' : g3Score <= 40 ? 'alto' : 'muy_alto';
+}
+
+// ════════════════════════════════════════════
+//  INICIO DEL FLUJO
+// ════════════════════════════════════════════
+function startSurvey() {
+  // Validar datos del empleado
+  const emp = resolveEmployeeData();
+  if (!emp.noemp && !emp.no) { toast('Ingresa tu número de empleado'); return; }
+  if (isManual && !emp.nombre) { toast('Ingresa tu nombre completo'); return; }
+  if (isManual && !emp.area) { toast('Ingresa tu área de trabajo'); return; }
+
+  currentEmployee = emp;
+
+  // Reset respuestas
+  g2Answers = {};
+  g3Answers = {};
+  _globalSecIdx = 0;
+
+  // Mostrar progreso
+  const pgEl = document.getElementById('prog-bar-global');
+  if (pgEl) {
+    pgEl.classList.add('show');
+    // Build phase segments
+    const phasesEl = document.getElementById('pg-phases');
+    if (phasesEl) {
+      phasesEl.innerHTML = ALL_SECTIONS.map((_,i) =>
+        `<div class="pg-seg" id="pg-seg-${i}"></div>`
+      ).join('');
+    }
+  }
+
+  showScreen('survey');
+  renderSection(0);
+}
+
+// ════════════════════════════════════════════
+//  ENVÍO
+// ════════════════════════════════════════════
+async function gasPost(data) {
+  if (!GAS_URL || GAS_URL === 'TU_URL_AQUI') return { offline: true };
+  const ctrl = new AbortController();
+  const tid = setTimeout(() => ctrl.abort(), NET_TIMEOUT);
+  try {
+    await fetch(GAS_URL, {
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data), signal:ctrl.signal
+    });
+    clearTimeout(tid);
+    return { ok: true };
+  } catch(e) { clearTimeout(tid); throw e; }
+}
+
+function savePending(data) {
+  try {
+    const key = 'nom035_pending_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch(e) { console.warn('No se pudo guardar pending', e); }
+}
+
+async function submitSurveys(atsData) {
+  const emp = currentEmployee;
+  const ts = new Date().toISOString();
+  const fecha = ts.slice(0,10);
+
+  const baseEmp = {
+    ts, fecha,
+    noemp:   emp.no || emp.noemp || '',
+    nombre:  emp.nombre || emp.name || '',
+    puesto:  emp.puesto || emp.position || '',
+    area:    emp.dept || emp.area || '',
+    planta:  emp.planta || emp.plant || '',
+    turno:   emp.turno || emp.shift || '',
+    genero:  emp.genero || '',
+    antiguedad: emp.antiguedad || calcAntiguedad(emp.ingreso) || '',
+    ingreso: emp.ingreso || emp.fecha_ingreso || '',
+    manual:  isManual ? 'SI' : 'NO',
+  };
+
+  const payloadG2 = {
+    action:'saveGRII', ...baseEmp,
+    score:g2Score, nivel:g2Nivel,
+    catAmbiente:     g2CatScores['amb']  || 0,
+    catFactores:     g2CatScores['prop'] || 0,
+    catOrg:          g2CatScores['org']  || 0,
+    catLiderazgo:    g2CatScores['lid']  || 0,
+    catEntorno:      g2CatScores['ent']  || 0,
+    catInterferencia:g2CatScores['int']  || 0,
+    catLidNeg:       g2CatScores['lid2'] || 0,
+    respuestas: g2Answers,
+  };
+
+  const payloadG3 = {
+    action:'saveGRIII', ...baseEmp,
+    score:g3Score, nivel:g3Nivel,
+    catLiderazgo:   g3CatScores['lid3'] || 0,
+    catRelaciones:  g3CatScores['rel3'] || 0,
+    catParticipacion:g3CatScores['par3']|| 0,
+    catDistribucion:g3CatScores['dis3'] || 0,
+    catCapacitacion:g3CatScores['cap3'] || 0,
+    respuestas: g3Answers,
+  };
+
+  showLoading('Enviando evaluación… por favor espera');
+
+  // Guardar localmente primero
+  savePending(payloadG2);
+  savePending(payloadG3);
+  if (atsData) savePending({ action:'saveGRI', ...baseEmp, ...atsData });
+
+  // Enviar al GAS
+  let ok = false;
+  try {
+    await gasPost(payloadG2);
+    await gasPost(payloadG3);
+    if (atsData) await gasPost({ action:'saveGRI', ...baseEmp, ...atsData });
+    ok = true;
+  } catch(e) { ok = false; }
+
+  hideLoading();
+  showDoneScreen(ok, atsData !== null);
+}
+
+// ════════════════════════════════════════════
+//  ATS
+// ════════════════════════════════════════════
+async function submitATS() {
+  const tipo = v('ats-tipo');
+  const fecha = v('ats-fecha') || (document.getElementById('ats-fecha')||{}).value || '';
+  if (!tipo) { toast('Selecciona el tipo de acontecimiento'); return; }
+  if (!fecha) { toast('Indica la fecha del evento'); return; }
+  const atsData = {
+    tipoEvento: tipo,
+    fechaEvento: fecha,
+    rol: v('ats-rol') || (document.getElementById('ats-rol')||{}).value,
+    descripcion: (document.getElementById('ats-desc')||{}).value || '',
+    sentimiento: (document.getElementById('ats-sentimiento')||{}).value || '',
+    atencion: (document.getElementById('ats-atencion')||{}).value || '',
+  };
+  await submitSurveys(atsData);
+}
+
+async function skipATS() {
+  await submitSurveys(null);
+}
+
+// ════════════════════════════════════════════
+//  PANTALLA DONE
+// ════════════════════════════════════════════
+const NIVEL_LABELS = { nulo:'Nulo', bajo:'Bajo', medio:'Medio', alto:'Alto', muy_alto:'Muy Alto' };
+const NIVEL_CLS = { nulo:'dp-null', bajo:'dp-low', medio:'dp-med', alto:'dp-high', muy_alto:'dp-vhigh' };
+
+function showDoneScreen(sent, withATS) {
+  const subEl = document.getElementById('done-sub');
+  if (subEl) {
+    subEl.textContent = sent
+      ? 'Tu evaluación fue enviada exitosamente. Gracias por tu participación — tu opinión ayuda a mejorar el ambiente laboral de toda la empresa.'
+      : 'Tu evaluación se guardó localmente y se enviará automáticamente cuando haya conexión. ¡Gracias!';
+  }
+
+  // Resumen del empleado
+  const empSum = document.getElementById('done-emp-summary');
+  if (empSum && currentEmployee) {
+    const emp = currentEmployee;
+    empSum.innerHTML = `
+      <div class="done-emp-name">${emp.nombre || emp.name || '—'}</div>
+      <div class="done-emp-meta">
+        ${emp.no || emp.noemp || '—'} ·
+        ${emp.dept || emp.area || '—'} ·
+        ${emp.turno || '—'} ·
+        ${new Date().toLocaleDateString('es-MX')}
+      </div>`;
+  }
+
+  // Resultados
+  const resEl = document.getElementById('done-results');
+  if (resEl) {
+    resEl.innerHTML = `
+      <div class="done-pill ${NIVEL_CLS[g2Nivel]}">
+        Guía II: ${NIVEL_LABELS[g2Nivel] || '—'} (${g2Score} pts)
+      </div>
+      <div class="done-pill ${NIVEL_CLS[g3Nivel]}">
+        Guía III: ${NIVEL_LABELS[g3Nivel] || '—'} (${g3Score} pts)
+      </div>
+      ${withATS ? '<div class="done-pill dp-med">ATS: Reporte enviado</div>' : ''}`;
+  }
+
+  showScreen('done');
+}
+
+// ════════════════════════════════════════════
+//  RESET
+// ════════════════════════════════════════════
+function resetAll() {
+  g2Answers = {};
+  g3Answers = {};
+  g2Score = 0; g2Nivel = ''; g2CatScores = {};
+  g3Score = 0; g3Nivel = ''; g3CatScores = {};
+  currentEmployee = null;
+  isManual = false;
+  _globalSecIdx = 0;
+
+  // Clear form
+  const inp = document.getElementById('inp-noemp');
+  if (inp) { inp.value = ''; inp.classList.remove('found','notfound'); }
+  _doLookup('');
+
+  const atsFields = ['ats-tipo','ats-desc','ats-sentimiento','ats-fecha'];
+  atsFields.forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+
+  // Clear survey card
+  const sc = document.getElementById('section-card');
+  if (sc) sc.innerHTML = '';
+
+  const pg = document.getElementById('prog-bar-global');
+  if (pg) pg.classList.remove('show');
+
+  showScreen('id');
+  window.scrollTo(0, 0);
+}
+
+// ════════════════════════════════════════════
+//  UI HELPERS
+// ════════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('screen-' + id);
+  if (el) { el.classList.add('active'); }
+}
+
+function showLoading(msg) {
+  const el = document.getElementById('loading');
+  const ml = document.getElementById('loading-msg');
+  if (el) el.classList.add('show');
+  if (ml) ml.textContent = msg || 'Cargando…';
+}
+function hideLoading() {
+  const el = document.getElementById('loading');
+  if (el) el.classList.remove('show');
+}
+
+let toastTimer = null;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+// ════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════
+(function init() {
+  // Cargar Head Count desde caché
+  const fromCache = loadHeadCountCache();
+
+  // Si no hay caché y hay GAS configurado, intentar sync
+  if (!fromCache && GAS_URL !== 'TU_URL_AQUI') {
+    syncHeadCount();
+  } else if (headCount.length === 0) {
+    // Sin catálogo: el formulario manual siempre aparece al escribir
+    updateHCStatus();
+    // Habilitar botón de inicio si el empleado escribe su número
+    const btn = document.getElementById('btn-start');
+    const inp = document.getElementById('inp-noemp');
+    if (inp && btn) {
+      inp.addEventListener('input', () => {
+        const val = inp.value.trim();
+        if (val.length >= 2) {
+          // Sin catálogo, siempre manual
+          const mf = document.getElementById('manual-form');
+          if (mf) mf.classList.add('show');
+          currentEmployee = { no: val, noemp: val };
+          isManual = true;
+          btn.disabled = false;
+        } else {
+          btn.disabled = true;
+        }
+      });
+    }
+  }
+
+  // Fecha ATS por defecto
+  const atsF = document.getElementById('ats-fecha');
+  if (atsF) atsF.value = new Date().toISOString().slice(0,10);
+})();
+
+window.addEventListener('error', e => console.error('Error global:', e.message));
+window.addEventListener('unhandledrejection', e => console.warn('Promise rechazada:', e.reason));
+</script>
+</body>
+</html>
