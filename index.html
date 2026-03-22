@@ -500,9 +500,14 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
         <div style="color:rgba(255,255,255,.65);font-size:13px">Si en el último año viviste o presenciaste un evento impactante en el trabajo, puedes reportarlo aquí para recibir apoyo.</div>
       </div>
       <div class="ats-body">
+        <!-- BOTÓN SALTAR — ARRIBA Y PROMINENTE -->
+        <button class="ats-skip" onclick="skipATS()" style="margin-bottom:18px;background:#EFF4FF;border:2px solid var(--navy);color:var(--navy);font-size:15px;font-weight:700;padding:15px;border-radius:12px">
+          ✓ &nbsp;No tengo ningún evento que reportar — Continuar con la evaluación →
+        </button>
+
         <div class="notice info" style="margin-bottom:20px">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-          <span>Este reporte es <strong>voluntario</strong>. Solo se usa para brindarte atención médica o psicológica si lo solicitas.</span>
+          <span>Si viviste o presenciaste un evento impactante en el trabajo, puedes reportarlo aquí. Es <strong>voluntario y confidencial</strong>.</span>
         </div>
         <div class="ats-q-grid" style="margin-bottom:14px">
           <div class="ats-q">
@@ -565,7 +570,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 <div class="screen" id="screen-done">
   <div class="done-card">
     <div class="done-icon">✅</div>
-    <div class="done-title">¡Evaluación completada!</div>
+    <div class="done-title">¡Muchas gracias!</div>
     <div class="done-sub" id="done-sub">Tu evaluación ha sido enviada exitosamente. Gracias por tu participación.</div>
 
     <div class="done-emp-summary" id="done-emp-summary"></div>
@@ -1191,10 +1196,10 @@ function navSection(dir) {
 
   // ¿Es la última sección?
   if (_globalSecIdx === TOTAL_SECTIONS - 1) {
-    // Calcular scores y pasar a ATS
+    // Calcular scores y enviar
     computeScores();
-    showScreen('ats');
     document.getElementById('prog-bar-global').classList.remove('show');
+    submitSurveys();
     return;
   }
 
@@ -1247,21 +1252,10 @@ function startSurvey() {
   g3Answers = {};
   _globalSecIdx = 0;
 
-  // Mostrar progreso
-  const pgEl = document.getElementById('prog-bar-global');
-  if (pgEl) {
-    pgEl.classList.add('show');
-    // Build phase segments
-    const phasesEl = document.getElementById('pg-phases');
-    if (phasesEl) {
-      phasesEl.innerHTML = ALL_SECTIONS.map((_,i) =>
-        `<div class="pg-seg" id="pg-seg-${i}"></div>`
-      ).join('');
-    }
-  }
-
-  showScreen('survey');
-  renderSection(0);
+  // Ir primero a ATS
+  const atsF = document.getElementById('ats-fecha');
+  if (atsF) atsF.value = new Date().toISOString().slice(0,10);
+  showScreen('ats');
 }
 
 // ════════════════════════════════════════════
@@ -1289,7 +1283,8 @@ function savePending(data) {
   } catch(e) { console.warn('No se pudo guardar pending', e); }
 }
 
-async function submitSurveys(atsData) {
+async function submitSurveys() {
+  const atsData = pendingATS || null;
   const emp = currentEmployee;
   const ts = new Date().toISOString();
   const fecha = ts.slice(0,10);
@@ -1349,30 +1344,66 @@ async function submitSurveys(atsData) {
   } catch(e) { ok = false; }
 
   hideLoading();
-  showDoneScreen(ok, atsData !== null);
+  showDoneScreen(ok);
 }
 
 // ════════════════════════════════════════════
 //  ATS
 // ════════════════════════════════════════════
+// ATS data guardado temporalmente hasta el envío final
+let pendingATS = null;
+
 async function submitATS() {
   const tipo = v('ats-tipo');
-  const fecha = v('ats-fecha') || (document.getElementById('ats-fecha')||{}).value || '';
+  const fecha = (document.getElementById('ats-fecha')||{}).value || '';
   if (!tipo) { toast('Selecciona el tipo de acontecimiento'); return; }
   if (!fecha) { toast('Indica la fecha del evento'); return; }
-  const atsData = {
+  pendingATS = {
     tipoEvento: tipo,
     fechaEvento: fecha,
-    rol: v('ats-rol') || (document.getElementById('ats-rol')||{}).value,
+    rol: (document.getElementById('ats-rol')||{}).value || '',
     descripcion: (document.getElementById('ats-desc')||{}).value || '',
     sentimiento: (document.getElementById('ats-sentimiento')||{}).value || '',
     atencion: (document.getElementById('ats-atencion')||{}).value || '',
   };
-  await submitSurveys(atsData);
+  // Guardar ATS localmente ya
+  savePending({ action:'saveGRI', ...currentEmployee, ...pendingATS,
+    ts: new Date().toISOString(), fecha: new Date().toISOString().slice(0,10) });
+  // Enviar al GAS en background (no bloqueante)
+  const emp = currentEmployee;
+  gasPost({ action:'saveGRI', ...emp,
+    ts: new Date().toISOString(), fecha: new Date().toISOString().slice(0,10),
+    ...pendingATS }).catch(()=>{});
+  toast('Reporte registrado ✓');
+  // Continuar a las encuestas
+  const pgEl = document.getElementById('prog-bar-global');
+  if (pgEl) {
+    pgEl.classList.add('show');
+    const phasesEl = document.getElementById('pg-phases');
+    if (phasesEl) {
+      phasesEl.innerHTML = ALL_SECTIONS.map((_,i) =>
+        `<div class="pg-seg" id="pg-seg-${i}"></div>`
+      ).join('');
+    }
+  }
+  showScreen('survey');
+  renderSection(0);
 }
 
-async function skipATS() {
-  await submitSurveys(null);
+function skipATS() {
+  // Sin ATS — ir directo a las encuestas Guía II y III
+  const pgEl = document.getElementById('prog-bar-global');
+  if (pgEl) {
+    pgEl.classList.add('show');
+    const phasesEl = document.getElementById('pg-phases');
+    if (phasesEl) {
+      phasesEl.innerHTML = ALL_SECTIONS.map((_,i) =>
+        `<div class="pg-seg" id="pg-seg-${i}"></div>`
+      ).join('');
+    }
+  }
+  showScreen('survey');
+  renderSection(0);
 }
 
 // ════════════════════════════════════════════
@@ -1381,41 +1412,16 @@ async function skipATS() {
 const NIVEL_LABELS = { nulo:'Nulo', bajo:'Bajo', medio:'Medio', alto:'Alto', muy_alto:'Muy Alto' };
 const NIVEL_CLS = { nulo:'dp-null', bajo:'dp-low', medio:'dp-med', alto:'dp-high', muy_alto:'dp-vhigh' };
 
-function showDoneScreen(sent, withATS) {
+function showDoneScreen(sent) {
   const subEl = document.getElementById('done-sub');
   if (subEl) {
-    subEl.textContent = sent
-      ? 'Tu evaluación fue enviada exitosamente. Gracias por tu participación — tu opinión ayuda a mejorar el ambiente laboral de toda la empresa.'
-      : 'Tu evaluación se guardó localmente y se enviará automáticamente cuando haya conexión. ¡Gracias!';
+    subEl.textContent = 'Tu participación es muy valiosa para nosotros. Los resultados nos ayudarán a mejorar el ambiente de trabajo para todos en Teleflex.';
   }
-
-  // Resumen del empleado
+  // Ocultar resumen y resultados — no mostrar puntajes al trabajador
   const empSum = document.getElementById('done-emp-summary');
-  if (empSum && currentEmployee) {
-    const emp = currentEmployee;
-    empSum.innerHTML = `
-      <div class="done-emp-name">${emp.nombre || emp.name || '—'}</div>
-      <div class="done-emp-meta">
-        ${emp.no || emp.noemp || '—'} ·
-        ${emp.dept || emp.area || '—'} ·
-        ${emp.turno || '—'} ·
-        ${new Date().toLocaleDateString('es-MX')}
-      </div>`;
-  }
-
-  // Resultados
+  if (empSum) empSum.style.display = 'none';
   const resEl = document.getElementById('done-results');
-  if (resEl) {
-    resEl.innerHTML = `
-      <div class="done-pill ${NIVEL_CLS[g2Nivel]}">
-        Guía II: ${NIVEL_LABELS[g2Nivel] || '—'} (${g2Score} pts)
-      </div>
-      <div class="done-pill ${NIVEL_CLS[g3Nivel]}">
-        Guía III: ${NIVEL_LABELS[g3Nivel] || '—'} (${g3Score} pts)
-      </div>
-      ${withATS ? '<div class="done-pill dp-med">ATS: Reporte enviado</div>' : ''}`;
-  }
-
+  if (resEl) resEl.style.display = 'none';
   showScreen('done');
 }
 
@@ -1430,6 +1436,7 @@ function resetAll() {
   currentEmployee = null;
   isManual = false;
   _globalSecIdx = 0;
+  pendingATS = null;
 
   // Clear form
   const inp = document.getElementById('inp-noemp');
