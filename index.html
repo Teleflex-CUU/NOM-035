@@ -578,6 +578,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
               <option value="muerte">Muerte de compañero</option>
               <option value="asalto">Asalto con violencia</option>
               <option value="desastre">Desastre / Explosión</option>
+              <option value="acoso">Acoso laboral o sexual</option>
               <option value="otro">Otro</option>
             </select>
           </div>
@@ -1356,16 +1357,20 @@ async function submitSurveys() {
 
   const baseEmp = {
     ts, fecha,
-    noemp:   emp.no || emp.noemp || '',
-    nombre:  emp.nombre || emp.name || '',
-    puesto:  emp.puesto || emp.position || '',
-    area:    emp.dept || emp.area || '',
-    planta:  emp.planta || emp.plant || '',
-    turno:   emp.turno || emp.shift || '',
-    genero:  emp.genero || '',
-    antiguedad: emp.antiguedad || calcAntiguedad(emp.ingreso) || '',
-    ingreso: emp.ingreso || emp.fecha_ingreso || '',
-    manual:  isManual ? 'SI' : 'NO',
+    noemp:      emp.no || emp.noemp || '',
+    nombre:     emp.nombre || emp.name || '',
+    puesto:     emp.puesto || emp.position || '',
+    categoria:  emp.categoria || '',
+    genero:     emp.genero || '',
+    edad:       emp.edad || '',
+    dept:       emp.dept || emp.area || emp.departamento || '',
+    subdept:    emp.subdept || emp.subdepartamento || '',
+    planta:     emp.planta || emp.plant || '',
+    turno:      emp.turno || emp.shift || '',
+    supervisor: emp.supervisor || '',
+    ingreso:    emp.ingreso || emp.fecha_ingreso || '',
+    imss:       emp.imss || '',
+    manual:     isManual ? 'SI' : 'NO',
   };
 
   const payloadG2 = {
@@ -1378,7 +1383,6 @@ async function submitSurveys() {
     catEntorno:      g2CatScores['ent']  || 0,
     catInterferencia:g2CatScores['int']  || 0,
     catLidNeg:       g2CatScores['lid2'] || 0,
-    respuestas: g2Answers,
   };
 
   const payloadG3 = {
@@ -1389,7 +1393,6 @@ async function submitSurveys() {
     catParticipacion:g3CatScores['par3']|| 0,
     catDistribucion:g3CatScores['dis3'] || 0,
     catCapacitacion:g3CatScores['cap3'] || 0,
-    respuestas: g3Answers,
   };
 
   showLoading('Enviando evaluación… por favor espera');
