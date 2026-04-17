@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0,user-scalable=yes"/>
 <title>Evaluación NOM-035 — Teleflex</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
@@ -29,7 +29,7 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{height:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--text);
-  min-height:100%;font-size:15px;line-height:1.55;overscroll-behavior:none;
+  min-height:100%;font-size:17px;line-height:1.6;overscroll-behavior:none;
   -webkit-font-smoothing:antialiased}
 
 /* ── BACKGROUND MESH ── */
@@ -69,9 +69,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 /* ══════════════════════════════════════
    PANTALLA: IDENTIFICACIÓN
 ══════════════════════════════════════ */
-#screen-id{align-items:center;justify-content:center;padding:24px 16px 40px}
+#screen-id{align-items:center;justify-content:center;padding:30px 32px 50px}
 .id-card{background:var(--white);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);
-  width:100%;max-width:540px;overflow:hidden}
+  width:100%;max-width:860px;overflow:hidden}
 .id-hero{background:linear-gradient(135deg,var(--navy3) 0%,var(--navy2) 100%);
   padding:32px 30px 36px;position:relative;overflow:hidden}
 .id-hero::after{content:'';position:absolute;right:-50px;bottom:-50px;
@@ -80,9 +80,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.03)}
 .id-eyebrow{font-size:11px;font-weight:700;color:rgba(255,255,255,.5);
   letter-spacing:1.8px;text-transform:uppercase;margin-bottom:10px}
-.id-title{font-family:var(--font-serif);color:#fff;font-size:26px;
-  line-height:1.25;margin-bottom:10px}
-.id-desc{color:rgba(255,255,255,.65);font-size:13.5px;line-height:1.6;max-width:380px}
+.id-title{font-family:var(--font-serif);color:#fff;font-size:32px;
+  line-height:1.25;margin-bottom:12px}
+.id-desc{color:rgba(255,255,255,.65);font-size:16px;line-height:1.6;max-width:600px}
 
 .id-body{padding:28px 30px 30px}
 
@@ -98,7 +98,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .emp-search{margin-bottom:20px}
 .emp-search-label{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;display:block}
 .emp-search-wrap{position:relative}
-.emp-search-wrap input{width:100%;padding:15px 18px;font-size:20px;font-weight:700;
+.emp-search-wrap input{width:100%;padding:18px 22px;font-size:26px;font-weight:700;
   font-family:var(--font);border:2.5px solid var(--border);border-radius:var(--r);
   color:var(--navy);background:#fff;letter-spacing:1px;transition:border-color .15s}
 .emp-search-wrap input:focus{outline:none;border-color:var(--navy);
@@ -119,21 +119,21 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .emp-avatar{width:44px;height:44px;background:var(--navy);border-radius:50%;
   display:flex;align-items:center;justify-content:center;color:#fff;
   font-weight:800;font-size:16px;flex-shrink:0}
-.emp-name{font-size:16px;font-weight:700;color:var(--navy)}
+.emp-name{font-size:20px;font-weight:700;color:var(--navy)}
 .emp-noemp{font-size:12px;color:var(--text3);font-weight:500;margin-top:1px}
 .emp-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .emp-field{background:#fff;border-radius:var(--r-sm);padding:9px 12px;border:1px solid #BBF7D0}
-.emp-field-lbl{font-size:10px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
-.emp-field-val{font-size:13px;font-weight:600;color:var(--text)}
+.emp-field-lbl{font-size:12px;font-weight:700;color:var(--text4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.emp-field-val{font-size:15px;font-weight:600;color:var(--text)}
 
 /* Formulario manual */
 .manual-form{display:none}
 .manual-form.show{display:block}
 .f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .f-full{margin-bottom:10px}
-.f-group label{font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:5px}
-.f-group input,.f-group select{width:100%;padding:10px 13px;border:1.5px solid var(--border);
-  border-radius:var(--r-sm);font-family:var(--font);font-size:14px;color:var(--text);
+.f-group label{font-size:15px;font-weight:600;color:var(--text2);display:block;margin-bottom:7px}
+.f-group input,.f-group select{width:100%;padding:13px 16px;border:1.5px solid var(--border);
+  border-radius:var(--r-sm);font-family:var(--font);font-size:17px;color:var(--text);
   transition:border-color .15s}
 .f-group input:focus,.f-group select:focus{outline:none;border-color:var(--navy)}
 
@@ -152,8 +152,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .flow-step-count{font-size:9px;color:var(--text4);margin-top:2px}
 
 /* ── BOTÓN INICIO ── */
-.btn-start{width:100%;padding:16px;background:var(--navy);color:#fff;
-  border:none;border-radius:var(--r-lg);font-family:var(--font);font-size:16px;
+.btn-start{width:100%;padding:20px;background:var(--navy);color:#fff;
+  border:none;border-radius:var(--r-lg);font-family:var(--font);font-size:20px;
   font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;
   gap:10px;box-shadow:0 6px 20px rgba(13,43,90,.3);transition:all .18s;letter-spacing:-.2px}
 .btn-start:hover{background:var(--navy2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,43,90,.38)}
@@ -168,8 +168,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   box-shadow:0 2px 12px rgba(0,0,0,.05);display:none}
 #prog-bar-global.show{display:block}
 .pg-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.pg-phase{font-size:13px;font-weight:700;color:var(--navy)}
-.pg-counter{font-size:12px;color:var(--text3);font-weight:500}
+.pg-phase{font-size:16px;font-weight:700;color:var(--navy)}
+.pg-counter{font-size:15px;color:var(--text3);font-weight:500}
 .pg-track{height:6px;background:var(--border2);border-radius:3px;overflow:hidden;margin-bottom:6px}
 .pg-fill{height:100%;border-radius:3px;
   background:linear-gradient(90deg,var(--navy),var(--teal));
@@ -183,7 +183,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
    PANTALLA: ENCUESTA (secciones)
 ══════════════════════════════════════ */
 #screen-survey{padding:0 0 80px}
-.survey-wrap{max-width:700px;margin:0 auto;padding:16px}
+.survey-wrap{max-width:980px;margin:0 auto;padding:20px}
 
 .section-card{background:var(--white);border-radius:var(--r-xl);
   box-shadow:var(--shadow);overflow:hidden;margin-bottom:0}
@@ -192,7 +192,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .sec-header{padding:24px 28px;background:linear-gradient(135deg,var(--navy3),var(--navy))}
 .sec-eyebrow{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);
   letter-spacing:1.8px;text-transform:uppercase;margin-bottom:6px}
-.sec-title{font-family:var(--font-serif);color:#fff;font-size:20px;line-height:1.3;margin-bottom:4px}
+.sec-title{font-family:var(--font-serif);color:#fff;font-size:24px;line-height:1.3;margin-bottom:6px}
 .sec-desc{color:rgba(255,255,255,.6);font-size:12.5px}
 
 /* Preguntas */
@@ -202,7 +202,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .q-item.answered{background:#FAFBFF}
 .q-item.unanswered-flag{background:#FFFBEB;border-left:3px solid var(--amber)}
 .q-num{font-size:10px;font-weight:700;color:var(--text4);letter-spacing:.5px;margin-bottom:5px}
-.q-text{font-size:14.5px;font-weight:500;color:var(--text);line-height:1.55;margin-bottom:13px}
+.q-text{font-size:18px;font-weight:500;color:var(--text);line-height:1.6;margin-bottom:16px}
 
 /* Opciones como chips horizontales */
 .q-chips{display:flex;gap:6px;flex-wrap:wrap}
@@ -213,6 +213,40 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .q-chip.sel{background:var(--navy);color:#fff;border-color:var(--navy)}
 
 /* En móvil, chips verticales si son muchos */
+/* ── iPAD LANDSCAPE (768px+) ── */
+@media(min-width:768px){
+  body{font-size:18px}
+  .survey-wrap{max-width:1000px;padding:24px 32px}
+  #screen-id{padding:32px 48px 56px}
+  .id-wrap{max-width:920px}
+  .id-title{font-size:34px}
+  .id-desc{font-size:17px;max-width:650px}
+  .emp-search-wrap input{font-size:28px;padding:20px 24px}
+  .emp-name{font-size:22px}
+  .emp-field-val{font-size:16px}
+  .emp-field-lbl{font-size:13px}
+  .q-card{padding:24px 28px;margin-bottom:16px}
+  .q-text{font-size:20px;margin-bottom:18px}
+  .opt-btn{padding:18px 22px;gap:16px}
+  .opt-label{font-size:18px}
+  .opt-circle{width:30px;height:30px}
+  .pg-phase{font-size:17px}
+  .pg-counter{font-size:16px}
+  .btn-start{padding:22px;font-size:21px}
+  .sec-title{font-size:26px}
+  .ats-wrap{max-width:920px}
+  .done-title{font-size:38px}
+  .done-sub{font-size:19px;max-width:600px}
+  .f-group label{font-size:16px}
+  .f-group input,.f-group select{padding:15px 18px;font-size:18px}
+  .f-row{grid-template-columns:1fr 1fr;gap:16px}
+  .hdr-title{font-size:17px}
+  .q-num{font-size:14px}
+  .notice{font-size:15px;padding:14px 18px}
+  .emp-search-label{font-size:16px}
+  .emp-avatar{width:52px;height:52px;font-size:19px}
+}
+
 @media(max-width:480px){
   .q-chips{flex-direction:column;gap:5px}
   .q-chip{text-align:center;padding:10px 14px}
@@ -235,14 +269,14 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
    PANTALLA: ATS (opcional)
 ══════════════════════════════════════ */
 #screen-ats{align-items:center;justify-content:center;padding:24px 16px 60px}
-.ats-wrap{width:100%;max-width:560px}
+.ats-wrap{width:100%;max-width:860px}
 .ats-card{background:var(--white);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);overflow:hidden}
-.ats-header{background:linear-gradient(135deg,#78350F,#92400E);padding:26px 28px}
+.ats-header{background:linear-gradient(135deg,#7C0000,#B91C1C);padding:30px 32px}
 .ats-header .sec-title{font-size:19px}
-.ats-body{padding:24px 28px}
+.ats-body{padding:26px 32px;background:#FAFAFA}
 .ats-q{margin-bottom:18px}
-.ats-q label{font-size:13px;font-weight:600;color:var(--text2);display:block;margin-bottom:6px}
-.ats-q input,.ats-q select,.ats-q textarea{width:100%;padding:10px 14px;
+.ats-q label{font-size:15px;font-weight:700;color:var(--text2);display:block;margin-bottom:8px}
+.ats-q input,.ats-q select,.ats-q textarea{width:100%;padding:14px 16px;
   border:1.5px solid var(--border);border-radius:var(--r-sm);
   font-family:var(--font);font-size:14px;color:var(--text);background:#fff;
   transition:border-color .15s}
@@ -260,14 +294,14 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 ══════════════════════════════════════ */
 #screen-done{align-items:center;justify-content:center;padding:24px 16px 60px}
 .done-card{background:var(--white);border-radius:var(--r-xl);box-shadow:var(--shadow-lg);
-  padding:44px 32px;text-align:center;max-width:480px;width:100%}
+  padding:52px 48px;text-align:center;max-width:680px;width:100%}
 .done-icon{width:76px;height:76px;border-radius:50%;
   background:linear-gradient(135deg,#D1FAE5,#6EE7B7);
   margin:0 auto 22px;display:flex;align-items:center;justify-content:center;font-size:34px;
   animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
 @keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-.done-title{font-family:var(--font-serif);font-size:26px;color:var(--navy);margin-bottom:10px}
-.done-sub{color:var(--text3);font-size:14px;max-width:340px;margin:0 auto 28px;line-height:1.6}
+.done-title{font-family:var(--font-serif);font-size:34px;color:var(--navy);margin-bottom:14px}
+.done-sub{color:var(--text3);font-size:17px;max-width:520px;margin:0 auto 32px;line-height:1.6}
 .done-results{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:28px}
 .done-pill{padding:7px 18px;border-radius:20px;font-size:12px;font-weight:700;border:2px solid}
 .dp-null{background:#EDE9FE;color:#5B21B6;border-color:#C4B5FD}
@@ -495,9 +529,30 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   <div class="ats-wrap">
     <div class="ats-card">
       <div class="ats-header">
-        <div class="sec-eyebrow">Guía de Referencia I — Opcional</div>
-        <div class="sec-title" style="font-family:var(--font-serif);color:#fff;font-size:19px;line-height:1.3;margin-bottom:6px">Acontecimiento Traumático Severo</div>
-        <div style="color:rgba(255,255,255,.65);font-size:13px">Si en el último año viviste o presenciaste un evento impactante en el trabajo, puedes reportarlo aquí para recibir apoyo.</div>
+        <!-- Eyebrow -->
+        <div class="sec-eyebrow" style="color:rgba(255,255,255,.7);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">Guía de Referencia I &nbsp;·&nbsp; Sección Opcional</div>
+
+        <!-- Título principal -->
+        <div style="font-family:var(--font-serif);color:#fff;font-size:26px;font-weight:700;line-height:1.2;margin-bottom:14px">
+          Acontecimiento Traumático Severo
+        </div>
+
+        <!-- Chip "CON MOTIVO DEL TRABAJO" -->
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.5);border-radius:30px;padding:8px 18px;margin-bottom:16px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2.5"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          <span style="color:#fff;font-size:15px;font-weight:800;letter-spacing:.5px">RELACIONADO CON EL TRABAJO</span>
+        </div>
+
+        <!-- Descripción clara -->
+        <div style="color:rgba(255,255,255,.9);font-size:15px;line-height:1.65;max-width:700px">
+          Esta sección es para reportar eventos <strong style="color:#fff;background:rgba(255,255,255,.2);padding:1px 6px;border-radius:4px">ocurridos dentro o con motivo de tu trabajo</strong> que hayan sido traumáticos o impactantes: accidentes graves, actos de violencia, asaltos, muerte de un compañero u otros eventos similares.
+        </div>
+
+        <!-- Banner VOLUNTARIO Y CONFIDENCIAL -->
+        <div style="margin-top:16px;background:rgba(0,0,0,.25);border-radius:10px;padding:12px 18px;display:flex;align-items:center;gap:12px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span style="color:#FEF3C7;font-size:14px;font-weight:600">Esta sección es <strong style="color:#FCD34D">voluntaria y estrictamente confidencial</strong>. Solo el médico de empresa tendrá acceso a tu respuesta.</span>
+        </div>
       </div>
       <div class="ats-body">
         <!-- BOTÓN SALTAR — ARRIBA Y PROMINENTE -->
@@ -505,9 +560,9 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
           ✓ &nbsp;No tengo ningún evento que reportar — Continuar con la evaluación →
         </button>
 
-        <div class="notice info" style="margin-bottom:20px">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-          <span>Si viviste o presenciaste un evento impactante en el trabajo, puedes reportarlo aquí. Es <strong>voluntario y confidencial</strong>.</span>
+        <div style="background:#FFF7ED;border:2px solid #F59E0B;border-radius:10px;padding:14px 18px;margin-bottom:22px;display:flex;align-items:flex-start;gap:12px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2.5" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span style="font-size:15px;color:#92400E;line-height:1.6"><strong>Recuerda:</strong> Solo reporta eventos <strong>ocurridos en el trabajo o por causas laborales</strong>. Si no tienes ningún evento que reportar, usa el botón de abajo para continuar.</span>
         </div>
         <div class="ats-q-grid" style="margin-bottom:14px">
           <div class="ats-q">
@@ -515,7 +570,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
             <input type="date" id="ats-fecha"/>
           </div>
           <div class="ats-q">
-            <label>Tipo de acontecimiento *</label>
+            <label>Tipo de acontecimiento <span style="color:#B91C1C;font-size:12px;font-weight:700;margin-left:4px">— EN EL TRABAJO *</span></label>
             <select id="ats-tipo">
               <option value="">Selecciona…</option>
               <option value="accidente">Accidente grave o fatal</option>
@@ -523,7 +578,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
               <option value="muerte">Muerte de compañero</option>
               <option value="asalto">Asalto con violencia</option>
               <option value="desastre">Desastre / Explosión</option>
-              <option value="acoso">Acoso laboral o sexual</option>
               <option value="otro">Otro</option>
             </select>
           </div>
