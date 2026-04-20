@@ -375,11 +375,11 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   </div>
   <div class="hdr-right">
     <button id="btn-resend" onclick="reenviarPendientes()" 
-  style="display:none;position:fixed;bottom:20px;right:20px;z-index:999;
+  style="display:block;position:fixed;bottom:20px;right:20px;z-index:999;
   background:#EF4444;color:white;border:none;border-radius:30px;
   padding:12px 20px;font-size:14px;font-weight:700;font-family:var(--font);
   box-shadow:0 4px 16px rgba(0,0,0,.3);cursor:pointer">
-  ⟳ Reenviar pendientes (<span id="pending-count">0</span>)
+  ⟳ Enviar pendientes: <span id="pending-count">0</span>
 </button>
 <div id="hc-status">
       <div id="hc-dot"></div>
@@ -1351,9 +1351,32 @@ async function gasPost(data) {
 
 function savePending(data) {
   try {
-    const key = 'nom035_pending_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-    localStorage.setItem(key, JSON.stringify(data));
+    const existing = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
+    existing.push(data);
+    localStorage.setItem('nom035_pending', JSON.stringify(existing));
   } catch(e) { console.warn('No se pudo guardar pending', e); }
+}
+
+function checkPending() {
+  try {
+    // También buscar claves legacy nom035_pending_*
+    const legacyKeys = Object.keys(localStorage).filter(k => k.startsWith('nom035_pending_'));
+    if (legacyKeys.length > 0) {
+      const existing = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
+      legacyKeys.forEach(k => {
+        try { existing.push(JSON.parse(localStorage.getItem(k))); localStorage.removeItem(k); } catch(e) {}
+      });
+      localStorage.setItem('nom035_pending', JSON.stringify(existing));
+    }
+    const pending = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
+    const btn = document.getElementById('btn-resend');
+    const cnt = document.getElementById('pending-count');
+    if (btn) {
+      btn.style.display = 'block';
+      btn.style.background = pending.length > 0 ? '#EF4444' : '#475569';
+      if (cnt) cnt.textContent = pending.length;
+    }
+  } catch(e) {}
 }
 
 async function submitSurveys() {
@@ -1602,6 +1625,55 @@ function toast(msg) {
 
 window.addEventListener('error', e => console.error('Error global:', e.message));
 window.addEventListener('unhandledrejection', e => console.warn('Promise rechazada:', e.reason));
+
+// ── PENDIENTES — RECUPERACIÓN ─────────────────────────
+function checkPending() {
+  try {
+    const legacyKeys = Object.keys(localStorage).filter(k => k.startsWith('nom035_pending_'));
+    if (legacyKeys.length > 0) {
+      const existing = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
+      legacyKeys.forEach(k => {
+        try { existing.push(JSON.parse(localStorage.getItem(k))); localStorage.removeItem(k); } catch(e) {}
+      });
+      localStorage.setItem('nom035_pending', JSON.stringify(existing));
+    }
+    const pending = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
+    const btn = document.getElementById('btn-resend');
+    const cnt = document.getElementById('pending-count');
+    if (btn) {
+      btn.style.display = 'block';
+      btn.style.background = pending.length > 0 ? '#EF4444' : '#475569';
+      if (cnt) cnt.textContent = pending.length;
+    }
+  } catch(e) {}
+}
+
+async function reenviarPendientes() {
+  const btn = document.getElementById('btn-resend');
+  if (btn) { btn.innerHTML = '⟳ Enviando...'; btn.disabled = true; }
+  try {
+    checkPending();
+    const pending = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
+    if (!pending.length) { toast('Sin registros pendientes en este dispositivo', 'ok'); return; }
+    let ok = 0; let fail = 0; const failed = [];
+    for (const payload of pending) {
+      try { await gasPost(payload); ok++; }
+      catch(e) { fail++; failed.push(payload); }
+    }
+    if (fail === 0) {
+      localStorage.removeItem('nom035_pending');
+      toast('✅ ' + ok + ' encuestas enviadas al sistema', 'ok');
+    } else {
+      localStorage.setItem('nom035_pending', JSON.stringify(failed));
+      toast('⚠️ ' + ok + ' enviadas · ' + fail + ' sin conexión', 'warn');
+    }
+  } catch(e) { toast('Error: ' + e.message, 'err'); }
+  finally { checkPending(); if (btn) btn.disabled = false; }
+}
+
+checkPending();
+setInterval(checkPending, 15000);
+
 </script>
 </body>
 </html>
