@@ -1071,6 +1071,19 @@ const G3_SECTIONS = [
 
 const OPTS = ['Siempre','Casi siempre','Algunas veces','Casi nunca','Nunca'];
 
+// Preguntas con escala invertida (índice 0-based) según Tabla 2 y 5 NOM-035
+const G2_INVERTIDAS = new Set([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,33,34,35,36,37,38,39,40,41,42,43,44,45]);
+const G3_INVERTIDAS = new Set([1,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,28,53,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71]);
+
+// Calcula el valor real de una respuesta aplicando inversión si corresponde
+function scoredValue(oi, qKey, phase) {
+  const inv = phase === 'g2' ? G2_INVERTIDAS : G3_INVERTIDAS;
+  // oi = índice del botón (0=Siempre, 4=Nunca)
+  // Normal: Siempre=0, Nunca=4 (ya coincide con oi)
+  // Invertida: Siempre=4, Nunca=0 → invertir
+  return inv.has(qKey) ? (4 - oi) : oi;
+}
+
 // Todas las secciones en orden
 const ALL_SECTIONS = [
   ...G2_SECTIONS.map((s,i) => ({ ...s, phase:'g2', localIdx:i })),
@@ -1213,7 +1226,7 @@ function answerQ(btn) {
   const phase = btn.dataset.phase;
 
   const answers = phase === 'g2' ? g2Answers : g3Answers;
-  answers[key] = oi;
+  answers[key] = scoredValue(oi, key, phase);
 
   // Update chips in this row
   const item = document.getElementById('qitem-' + gi + '-' + qi);
@@ -1307,7 +1320,7 @@ function computeScores() {
     g3CatScores[sec.id] = cs;
   });
   g3Score = g3Total;
-  g3Nivel = g3Score <= 10 ? 'nulo' : g3Score <= 20 ? 'bajo' : g3Score <= 30 ? 'medio' : g3Score <= 40 ? 'alto' : 'muy_alto';
+  g3Nivel = g3Score <= 50 ? 'nulo' : g3Score <= 75 ? 'bajo' : g3Score <= 99 ? 'medio' : g3Score <= 140 ? 'alto' : 'muy_alto'; // Rangos oficiales NOM-035 Guía III
 }
 
 // ════════════════════════════════════════════
