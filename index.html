@@ -1339,11 +1339,19 @@ async function gasPost(data) {
   const ctrl = new AbortController();
   const tid = setTimeout(() => ctrl.abort(), NET_TIMEOUT);
   try {
-    await fetch(GAS_URL, {
-      method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(data), signal:ctrl.signal
-    });
+    // Intentar primero con GET (más compatible con CORS en GAS)
+    const params = new URLSearchParams(Object.entries(data).map(([k,v])=>[k, typeof v==='object'?JSON.stringify(v):String(v)]));
+    const getUrl = GAS_URL + '?' + params.toString();
+    if (getUrl.length < 2000) {
+      await fetch(getUrl, { method:'GET', redirect:'follow', signal:ctrl.signal });
+    } else {
+      // Si el payload es muy grande usar POST no-cors
+      await fetch(GAS_URL, {
+        method:'POST', mode:'no-cors',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(data), signal:ctrl.signal
+      });
+    }
     clearTimeout(tid);
     return { ok: true };
   } catch(e) { clearTimeout(tid); throw e; }
@@ -1657,7 +1665,11 @@ async function reenviarPendientes() {
     if (!pending.length) { toast('Sin registros pendientes en este dispositivo', 'ok'); return; }
     let ok = 0; let fail = 0; const failed = [];
     for (const payload of pending) {
-      try { await gasPost(payload); ok++; }
+      try {
+        await gasPost(payload);
+        ok++;
+        await new Promise(r => setTimeout(r, 300)); // pausa entre envíos
+      }
       catch(e) { fail++; failed.push(payload); }
     }
     if (fail === 0) {
