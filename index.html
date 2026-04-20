@@ -374,7 +374,14 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     </div>
   </div>
   <div class="hdr-right">
-    <div id="hc-status">
+    <button id="btn-resend" onclick="reenviarPendientes()" 
+  style="display:none;position:fixed;bottom:20px;right:20px;z-index:999;
+  background:#EF4444;color:white;border:none;border-radius:30px;
+  padding:12px 20px;font-size:14px;font-weight:700;font-family:var(--font);
+  box-shadow:0 4px 16px rgba(0,0,0,.3);cursor:pointer">
+  ⟳ Reenviar pendientes (<span id="pending-count">0</span>)
+</button>
+<div id="hc-status">
       <div id="hc-dot"></div>
       <span id="hc-label">Sin catálogo</span>
     </div>
