@@ -1339,19 +1339,13 @@ async function gasPost(data) {
   const ctrl = new AbortController();
   const tid = setTimeout(() => ctrl.abort(), NET_TIMEOUT);
   try {
-    // Intentar primero con GET (más compatible con CORS en GAS)
-    const params = new URLSearchParams(Object.entries(data).map(([k,v])=>[k, typeof v==='object'?JSON.stringify(v):String(v)]));
-    const getUrl = GAS_URL + '?' + params.toString();
-    if (getUrl.length < 2000) {
-      await fetch(getUrl, { method:'GET', redirect:'follow', signal:ctrl.signal });
-    } else {
-      // Si el payload es muy grande usar POST no-cors
-      await fetch(GAS_URL, {
-        method:'POST', mode:'no-cors',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(data), signal:ctrl.signal
-      });
-    }
+    // Siempre usar GET con parámetros — partir en chunks si es necesario
+    const params = new URLSearchParams();
+    Object.entries(data).forEach(([k,v]) => {
+      params.append(k, typeof v === 'object' ? JSON.stringify(v) : String(v||''));
+    });
+    const url = GAS_URL + '?' + params.toString();
+    const r = await fetch(url, { method:'GET', redirect:'follow', signal:ctrl.signal });
     clearTimeout(tid);
     return { ok: true };
   } catch(e) { clearTimeout(tid); throw e; }
