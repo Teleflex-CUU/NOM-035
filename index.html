@@ -1405,48 +1405,46 @@ async function submitSurveys() {
     manual:     isManual ? 'SI' : 'NO',
   };
 
-  const payloadG2 = {
-    action:'saveGRII', ...baseEmp,
-    score:g2Score, nivel:g2Nivel,
-    catAmbiente:     g2CatScores['amb']  || 0,
-    catFactores:     g2CatScores['prop'] || 0,
-    catOrg:          g2CatScores['org']  || 0,
-    catLiderazgo:    g2CatScores['lid']  || 0,
-    catEntorno:      g2CatScores['ent']  || 0,
-    catInterferencia:g2CatScores['int']  || 0,
-    catLidNeg:       g2CatScores['lid2'] || 0,
-  };
-
-  const payloadG3 = {
-    action:'saveGRIII', ...baseEmp,
-    score:g3Score, nivel:g3Nivel,
-    catLiderazgo:   g3CatScores['lid3'] || 0,
-    catRelaciones:  g3CatScores['rel3'] || 0,
-    catParticipacion:g3CatScores['par3']|| 0,
-    catDistribucion:g3CatScores['dis3'] || 0,
-    catCapacitacion:g3CatScores['cap3'] || 0,
+  // Payload único — una sola llamada al GAS (saveTodo)
+  const payloadTodo = {
+    action: 'saveTodo',
+    ...baseEmp,
+    // Guía II
+    score_g2:  g2Score,
+    nivel_g2:  g2Nivel,
+    catAmbiente:      g2CatScores['amb']  || 0,
+    catFactores:      g2CatScores['prop'] || 0,
+    catOrg:           g2CatScores['org']  || 0,
+    catLiderazgo:     g2CatScores['lid']  || 0,
+    catEntorno:       g2CatScores['ent']  || 0,
+    catInterferencia: g2CatScores['int']  || 0,
+    catLidNeg:        g2CatScores['lid2'] || 0,
+    // Guía III
+    score_g3:  g3Score,
+    nivel_g3:  g3Nivel,
+    catLid3:   g3CatScores['lid3'] || 0,
+    catRel3:   g3CatScores['rel3'] || 0,
+    catPar3:   g3CatScores['par3'] || 0,
+    catDis3:   g3CatScores['dis3'] || 0,
+    catCap3:   g3CatScores['cap3'] || 0,
   };
 
   showLoading('Enviando evaluación… por favor espera');
 
-  // Enviar al GAS — usar GET que confirma respuesta
   let ok = false;
   try {
-    await gasPost(payloadG2);
-    await gasPost(payloadG3);
+    await gasPost(payloadTodo);
     if (atsData) await gasPost({ action:'saveGRI', ...baseEmp, ...atsData });
     ok = true;
-    // Limpiar cualquier pendiente anterior de este empleado
+    // Limpiar pendientes de este empleado
     try {
       const pend = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
       const filtered = pend.filter(p => String(p.noemp) !== String(baseEmp.noemp));
       localStorage.setItem('nom035_pending', JSON.stringify(filtered));
     } catch(e2) {}
   } catch(e) {
-    // Solo guardar como pendiente si hubo error de red real
     ok = false;
-    savePending(payloadG2);
-    savePending(payloadG3);
+    savePending(payloadTodo);
     if (atsData) savePending({ action:'saveGRI', ...baseEmp, ...atsData });
   }
 
@@ -1686,6 +1684,21 @@ async function reenviarPendientes() {
 
 checkPending();
 setInterval(checkPending, 15000);
+
+// Reintento automático de pendientes cada 10 segundos
+setInterval(async function autoRetry() {
+  try {
+    const pending = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
+    if (!pending.length) return;
+    const failed = [];
+    for (const payload of pending) {
+      try { await gasPost(payload); }
+      catch(e) { failed.push(payload); }
+    }
+    localStorage.setItem('nom035_pending', JSON.stringify(failed));
+    checkPending();
+  } catch(e) {}
+}, 10000);
 
 </script>
 </body>
