@@ -213,6 +213,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 .q-chip.sel{background:var(--navy);color:#fff;border-color:var(--navy)}
 
 /* En móvil, chips verticales si son muchos */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 /* ── iPAD LANDSCAPE (768px+) ── */
 @media(min-width:768px){
   body{font-size:18px}
@@ -374,12 +375,13 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
     </div>
   </div>
   <div class="hdr-right">
-    <button id="btn-resend" onclick="reenviarPendientes()" 
-  style="display:block;position:fixed;bottom:20px;right:20px;z-index:999;
-  background:#EF4444;color:white;border:none;border-radius:30px;
-  padding:12px 20px;font-size:14px;font-weight:700;font-family:var(--font);
-  box-shadow:0 4px 16px rgba(0,0,0,.3);cursor:pointer">
-  ⟳ Enviar pendientes: <span id="pending-count">0</span>
+    
+<button id="btn-resend" onclick="reenviarPendientes()" title="Encuestas pendientes de envío"
+  style="display:none;align-items:center;gap:5px;background:rgba(239,68,68,.15);
+  border:1px solid rgba(239,68,68,.4);border-radius:20px;padding:3px 10px;
+  color:#FCA5A5;font-size:11px;font-weight:700;font-family:var(--font);cursor:pointer">
+  <span style="width:6px;height:6px;background:#EF4444;border-radius:50%;display:inline-block;animation:pulse 1s infinite"></span>
+  <span id="pending-count">0</span> pendiente(s)
 </button>
 <div id="hc-status">
       <div id="hc-dot"></div>
@@ -1374,7 +1376,7 @@ function checkPending() {
     const btn = document.getElementById('btn-resend');
     const cnt = document.getElementById('pending-count');
     if (btn) {
-      btn.style.display = 'block';
+      btn.style.display = pending.length > 0 ? 'flex' : 'none';
       btn.style.background = pending.length > 0 ? '#EF4444' : '#475569';
       if (cnt) cnt.textContent = pending.length;
     }
@@ -1648,7 +1650,7 @@ function checkPending() {
     const btn = document.getElementById('btn-resend');
     const cnt = document.getElementById('pending-count');
     if (btn) {
-      btn.style.display = 'block';
+      btn.style.display = pending.length > 0 ? 'flex' : 'none';
       btn.style.background = pending.length > 0 ? '#EF4444' : '#475569';
       if (cnt) cnt.textContent = pending.length;
     }
@@ -1657,7 +1659,7 @@ function checkPending() {
 
 async function reenviarPendientes() {
   const btn = document.getElementById('btn-resend');
-  if (btn) { btn.innerHTML = '⟳ Enviando...'; btn.disabled = true; }
+  if (btn) { btn.style.opacity = '0.5'; btn.disabled = true; }
   try {
     checkPending();
     const pending = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
