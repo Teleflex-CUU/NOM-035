@@ -1435,19 +1435,26 @@ async function submitSurveys() {
 
   showLoading('Enviando evaluación… por favor espera');
 
-  // Guardar localmente primero
-  savePending(payloadG2);
-  savePending(payloadG3);
-  if (atsData) savePending({ action:'saveGRI', ...baseEmp, ...atsData });
-
-  // Enviar al GAS
+  // Enviar al GAS — usar GET que confirma respuesta
   let ok = false;
   try {
     await gasPost(payloadG2);
     await gasPost(payloadG3);
     if (atsData) await gasPost({ action:'saveGRI', ...baseEmp, ...atsData });
     ok = true;
-  } catch(e) { ok = false; }
+    // Limpiar cualquier pendiente anterior de este empleado
+    try {
+      const pend = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
+      const filtered = pend.filter(p => String(p.noemp) !== String(baseEmp.noemp));
+      localStorage.setItem('nom035_pending', JSON.stringify(filtered));
+    } catch(e2) {}
+  } catch(e) {
+    // Solo guardar como pendiente si hubo error de red real
+    ok = false;
+    savePending(payloadG2);
+    savePending(payloadG3);
+    if (atsData) savePending({ action:'saveGRI', ...baseEmp, ...atsData });
+  }
 
   hideLoading();
   showDoneScreen(ok);
