@@ -1358,7 +1358,6 @@ async function gasPost(data) {
   const ctrl = new AbortController();
   const tid = setTimeout(() => ctrl.abort(), NET_TIMEOUT);
   try {
-    // Siempre usar GET con parámetros — partir en chunks si es necesario
     const params = new URLSearchParams();
     Object.entries(data).forEach(([k,v]) => {
       params.append(k, typeof v === 'object' ? JSON.stringify(v) : String(v||''));
@@ -1366,16 +1365,17 @@ async function gasPost(data) {
     const url = GAS_URL + '?' + params.toString();
     const r = await fetch(url, { method:'GET', redirect:'follow', signal:ctrl.signal });
     clearTimeout(tid);
-    return { ok: true };
-  } catch(e) { clearTimeout(tid); throw e; }
-}
-
-function savePending(data) {
-  try {
-    const existing = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
-    existing.push(data);
-    localStorage.setItem('nom035_pending', JSON.stringify(existing));
-  } catch(e) { console.warn('No se pudo guardar pending', e); }
+    // ← NUEVO: leer y verificar la respuesta del servidor
+    const json = await r.json();
+    if (!json.ok) {
+      console.error('GAS error:', json.error);
+      throw new Error(json.error || 'Error del servidor');
+    }
+    return json;
+  } catch(e) {
+    clearTimeout(tid);
+    throw e;
+  }
 }
 
 function checkPending() {
