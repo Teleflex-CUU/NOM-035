@@ -971,7 +971,7 @@ const G2_SECTIONS = [
       'Existe colaboración entre los miembros de mi equipo de trabajo',
       'Se presentan situaciones de violencia o acoso entre compañeros',
       'Se presentan situaciones de discriminación en el trabajo',
-      'La relación con mis clientes, usuarios o pacientes es adecuada',
+      'La relación con mis Compañeros, jefes y/o empleados a cargo es buena',
     ]
   },
   { id:'ent', name:'Entorno Organizacional', guia:'Guía II', totalGuia:72,
@@ -1424,11 +1424,9 @@ async function submitSurveys() {
     manual:     isManual ? 'SI' : 'NO',
   };
 
-  // Payload único — una sola llamada al GAS (saveTodo)
   const payloadTodo = {
     action: 'saveTodo',
     ...baseEmp,
-    // Guía II
     score_g2:  g2Score,
     nivel_g2:  g2Nivel,
     catAmbiente:      g2CatScores['amb']  || 0,
@@ -1438,7 +1436,6 @@ async function submitSurveys() {
     catEntorno:       g2CatScores['ent']  || 0,
     catInterferencia: g2CatScores['int']  || 0,
     catLidNeg:        g2CatScores['lid2'] || 0,
-    // Guía III
     score_g3:  g3Score,
     nivel_g3:  g3Nivel,
     catLid3:   g3CatScores['lid3'] || 0,
@@ -1448,27 +1445,27 @@ async function submitSurveys() {
     catCap3:   g3CatScores['cap3'] || 0,
   };
 
-  showLoading('Enviando evaluación… por favor espera');
+  // ── MOSTRAR PANTALLA DONE INMEDIATAMENTE ──
+  showDoneScreen(true);
 
-  let ok = false;
-  try {
-    await gasPost(payloadTodo);
-    if (atsData) await gasPost({ action:'saveGRI', ...baseEmp, ...atsData });
-    ok = true;
-    // Limpiar pendientes de este empleado
+  // ── ENVIAR EN BACKGROUND SIN BLOQUEAR ──
+  (async () => {
     try {
-      const pend = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
-      const filtered = pend.filter(p => String(p.noemp) !== String(baseEmp.noemp));
-      localStorage.setItem('nom035_pending', JSON.stringify(filtered));
-    } catch(e2) {}
-  } catch(e) {
-    ok = false;
-    savePending(payloadTodo);
-    if (atsData) savePending({ action:'saveGRI', ...baseEmp, ...atsData });
-  }
-
-  hideLoading();
-  showDoneScreen(ok);
+      await gasPost(payloadTodo);
+      if (atsData) await gasPost({ action:'saveGRI', ...baseEmp, ...atsData });
+      // Limpiar pendientes de este empleado
+      try {
+        const pend = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
+        const filtered = pend.filter(p => String(p.noemp) !== String(baseEmp.noemp));
+        localStorage.setItem('nom035_pending', JSON.stringify(filtered));
+      } catch(e2) {}
+      toast('✅ Encuesta enviada correctamente', 'ok');
+    } catch(e) {
+      savePending(payloadTodo);
+      if (atsData) savePending({ action:'saveGRI', ...baseEmp, ...atsData });
+      toast('Sin conexión — guardado para reenvío', 'warn');
+    }
+  })();
 }
 
 // ════════════════════════════════════════════
