@@ -1378,27 +1378,7 @@ async function gasPost(data) {
   }
 }
 
-function checkPending() {
-  try {
-    // También buscar claves legacy nom035_pending_*
-    const legacyKeys = Object.keys(localStorage).filter(k => k.startsWith('nom035_pending_'));
-    if (legacyKeys.length > 0) {
-      const existing = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
-      legacyKeys.forEach(k => {
-        try { existing.push(JSON.parse(localStorage.getItem(k))); localStorage.removeItem(k); } catch(e) {}
-      });
-      localStorage.setItem('nom035_pending', JSON.stringify(existing));
-    }
-    const pending = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
-    const btn = document.getElementById('btn-resend');
-    const cnt = document.getElementById('pending-count');
-    if (btn) {
-      btn.style.display = pending.length > 0 ? 'flex' : 'none';
-      btn.style.background = pending.length > 0 ? '#EF4444' : '#475569';
-      if (cnt) cnt.textContent = pending.length;
-    }
-  } catch(e) {}
-}
+
 
 async function submitSurveys() {
   const atsData = pendingATS || null;
@@ -1701,20 +1681,30 @@ async function reenviarPendientes() {
 checkPending();
 setInterval(checkPending, 15000);
 
-// Reintento automático de pendientes cada 10 segundos
+// Reintento automático — envía pendientes y limpia SOLO los exitosos
 setInterval(async function autoRetry() {
   try {
     const pending = JSON.parse(localStorage.getItem('nom035_pending') || '[]');
     if (!pending.length) return;
     const failed = [];
     for (const payload of pending) {
-      try { await gasPost(payload); }
-      catch(e) { failed.push(payload); }
+      try {
+        await gasPost(payload);
+        // Solo si no lanza error → fue exitoso → NO agregar a failed
+      } catch(e) {
+        failed.push(payload); // falló → mantener para siguiente intento
+      }
     }
-    localStorage.setItem('nom035_pending', JSON.stringify(failed));
-    checkPending();
+    // Guardar solo los que fallaron
+    if (failed.length < pending.length) {
+      // Al menos uno se envió — actualizar lista
+      localStorage.setItem('nom035_pending', JSON.stringify(failed));
+      checkPending();
+    }
   } catch(e) {}
-}, 10000);
+}, 30000); // cada 30 segundos (no 10, para no saturar el GAS)
+
+
 
 </script>
 </body>
